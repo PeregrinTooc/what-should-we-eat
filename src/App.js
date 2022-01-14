@@ -109,7 +109,6 @@ function App() {
   return (
     <div>
       <Table />
-      <Button>'Hello World'</Button>
     </div>
   );
 }
