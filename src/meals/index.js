@@ -1,6 +1,6 @@
-const csvToJson = require('csvtojson')
+const axios = require('axios')
 async function init(mealsFilePath) {
-    const jsonArray = await csvToJson({ delimiter: '|' }).fromFile(mealsFilePath);
+    const jsonArray = await axios.get('https://github.com/PeregrinTooc/what-should-we-eat/blob/main/src/meals/resources/meals.csv');
     return new MealsHandler(jsonArray)
 }
 

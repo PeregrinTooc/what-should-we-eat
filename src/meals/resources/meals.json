@@ -1,0 +1,286 @@
+{
+  "meals": [
+    {
+      "mealName": "Ofengemüse mit Kartoffeln und Tzatziki",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "\r"
+    },
+    {
+      "mealName": "Kürbis-Gnocchi-Auflauf",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "\r"
+    },
+    {
+      "mealName": "Linsenbolognese",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "\r"
+    },
+    {
+      "mealName": "Süßkartoffel-Erdnuss-Curry",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "\r"
+    },
+    {
+      "mealName": "Wirsing mit Kartoffeln",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "9\r"
+    },
+    {
+      "mealName": "Grünkohl mit Kartoffeln",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "10\r"
+    },
+    {
+      "mealName": "Linsensuppe mit Pilzen",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "10\r"
+    },
+    {
+      "mealName": "Linsensuppe klassisch",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "10\r"
+    },
+    {
+      "mealName": "Linsensuppe marokkanisch",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "10\r"
+    },
+    {
+      "mealName": "Erbsensuppe",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "10\r"
+    },
+    {
+      "mealName": "Spinatsauce",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "7\r"
+    },
+    {
+      "mealName": "Pilzsauce",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "7\r"
+    },
+    {
+      "mealName": "Burger",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "5\r"
+    },
+    {
+      "mealName": "Curry mit Gemüse und Tofu und Reise",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "\r"
+    },
+    {
+      "mealName": "Curry mit Gemüse und Tofu und Mie-Nudeln",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "\r"
+    },
+    {
+      "mealName": "Salat mit Pilzen Tofu und Nüssen",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "\r"
+    },
+    {
+      "mealName": "Salat mit Avocado und Kernen und Eierdressing",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "\r"
+    },
+    {
+      "mealName": "Nudelsalat mit Pesto Tomaten und Pinienkernen",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "\r"
+    },
+    {
+      "mealName": "verschiedene Sorten Houmous mit Rohkost",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "\r"
+    },
+    {
+      "mealName": "Kartoffelsuppe",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "\r"
+    },
+    {
+      "mealName": "Butterbohnensuppe",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "\r"
+    },
+    {
+      "mealName": "Tomatensauce",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "\r"
+    },
+    {
+      "mealName": "Pizza",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "\r"
+    },
+    {
+      "mealName": "Lasagne mit Zucchini und Linsen",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "\r"
+    },
+    {
+      "mealName": "Nudelauflauf",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "\r"
+    },
+    {
+      "mealName": "Blumenkohl-Kartoffel-Auflauf",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "9\r"
+    },
+    {
+      "mealName": "Kartoffel-Lauch-Suppe (mit Linsen)",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "9\r"
+    },
+    {
+      "mealName": "\"Spaghetti Polpette \"",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "\r"
+    },
+    {
+      "mealName": "Spaghetti Carbonara",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "\r"
+    },
+    {
+      "mealName": "Bulgur mit mediterranem Gemüse",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "9\r"
+    },
+    {
+      "mealName": "Asia-Salat",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "\r"
+    },
+    {
+      "mealName": "Falaffel",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "\r"
+    },
+    {
+      "mealName": "Summer-Rolls",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "\r"
+    },
+    {
+      "mealName": "\"Wassermelonen",
+      "effort": " Gurken und Tomatensalat\"",
+      "tags": "",
+      "helthLevel\r": ""
+    },
+    {
+      "mealName": "Asia-Gemüsesuppe mit Reis",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "10\r"
+    },
+    {
+      "mealName": "Schwarze Bohnen mit Reis",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "10\r"
+    },
+    {
+      "mealName": "Rouladengulasch",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "\r"
+    },
+    {
+      "mealName": "Gemüsecremesuppe",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "9\r"
+    },
+    {
+      "mealName": "Vollkornpancakes gefüllt/herzhaft",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "\r"
+    },
+    {
+      "mealName": "Chili",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "10\r"
+    },
+    {
+      "mealName": "Kichererbsensuppe",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "\r"
+    },
+    {
+      "mealName": "Kichererbsendal in Tomatensauce",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "\r"
+    },
+    {
+      "mealName": "Linsendal in Cashewsauce",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "\r"
+    },
+    {
+      "mealName": "Kartoffeln mit Spinat und Kichererbsen-Rührei",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "\r"
+    },
+    {
+      "mealName": "\"Jambalaya \"",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "\r"
+    },
+    {
+      "mealName": "Soja-Schnetzel-Gyros",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "\r"
+    },
+    {
+      "mealName": "Möhrengemüse durcheinander",
+      "effort": "",
+      "tags": "",
+      "helthLevel\r": "10"
+    }
+  ]
+}
