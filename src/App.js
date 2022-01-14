@@ -10,8 +10,7 @@ function Table() {
   useEffect(() => {
     async function fetchData() {
       const mealsData = await meals.init('./meals/resources/meals.csv')
-      //getAllMeals()
-      setData(mealsData)
+      setData(mealsData.getAllMeals())
     }
     fetchData();
   }, []);
@@ -33,6 +32,19 @@ function Table() {
     ],
     []
   )
+
+  // return (
+  //   <>
+  //     <ul>
+  //       {data.map(item => (
+  //         <li key={item.mealName}>
+  //           {item.mealName}
+  //         </li>
+  //       ))}
+  //     </ul>
+  //   </>
+  // );
+
 
   const tableInstance = useTable({ columns, data })
 
