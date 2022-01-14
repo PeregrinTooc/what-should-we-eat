@@ -30,4 +30,5 @@ class MealsHandler {
     getAllMeals() { return this._meals }
 }
 
+exports.init = init
 module.exports = { init, getMealPlan }

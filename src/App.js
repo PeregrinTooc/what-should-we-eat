@@ -1,7 +1,7 @@
 import { Button, List } from './AppElements'
 import React, { useState, useEffect } from 'react';
 import { useTable } from 'react-table';
-const meals = require('./meals/index.js')
+import { init } from './meals/index.js'
 
 function Table() {
 
@@ -9,7 +9,7 @@ function Table() {
 
   useEffect(() => {
     async function fetchData() {
-      const mealsData = await meals.init('./meals/resources/meals.csv')
+      const mealsData = await init('./meals/resources/meals.csv')
       setData(mealsData.getAllMeals())
     }
     fetchData();
