@@ -1,16 +1,13 @@
-const cut = require('./index.js')
-const fs = require('fs')
-const masterFilePath = 'src/meals/resources/meals.test.master.csv'
-const filePath = 'src/meals/resources/meals.test.csv'
+import { init, getMealPlan } from './index.js'
+
+const filePath = 'meals.test.json'
 let mealsHandler
 let mealPlan
 let meals
 
 beforeEach(async () => {
-    const master = fs.readFileSync(masterFilePath, 'utf8')
-    fs.writeFileSync(filePath, master)
-    mealsHandler = await cut.init(filePath)
-    mealPlan = cut.getMealPlan()
+    mealsHandler = await init(filePath)
+    mealPlan = getMealPlan()
     meals = mealsHandler.getAllMeals()
 })
 
@@ -23,10 +20,10 @@ test('getAllMeals should return an array of meals', () => {
     expect(meals).toBeDefined()
     expect(meals[0]).toEqual(
         {
-            mealName: 'Spaghetti mit Spinatsauce',
-            effort: '2',
-            tags: 'Pasta',
-            healthLevel: '7'
+            mealName: "Ofengemüse mit Kartoffeln und Tzatziki",
+            effort: "3",
+            tags: "Kartoffeln",
+            helthLevel: "7"
         }
     )
 })

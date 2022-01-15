@@ -9,7 +9,7 @@ function Table() {
 
   useEffect(() => {
     async function fetchData() {
-      const mealsData = await init('./meals/resources/meals.csv')
+      const mealsData = await init('meals.json')
       setData(mealsData.getAllMeals())
     }
     fetchData();

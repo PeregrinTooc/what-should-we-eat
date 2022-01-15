@@ -1,7 +1,7 @@
 const axios = require('axios')
 const { Buffer } = require('buffer');
 async function init(mealsFilePath) {
-    const jsonArray = await axios.get('https://api.github.com/repos/PeregrinTooc/what-should-we-eat/contents/src/meals/resources/meals.json')
+    const jsonArray = await axios.get('https://api.github.com/repos/PeregrinTooc/what-should-we-eat/contents/src/meals/resources/' + mealsFilePath)
     let encodedData = jsonArray.data.content;
     const buffer = Buffer.from(encodedData, 'base64')
     const meals = buffer.toString()
@@ -30,4 +30,4 @@ class MealsHandler {
     getAllMeals() { return this._meals }
 }
 
-export { init }
+export { init, getMealPlan }
