@@ -18,34 +18,20 @@ function Table() {
   const columns = React.useMemo(
     () => [
       {
-        Header: 'Column 1',
+        Header: 'Name',
         accessor: 'mealName', // accessor is the "key" in the data
       },
       {
-        Header: 'Column 2',
+        Header: 'Aufwand',
         accessor: 'effort',
       },
       {
-        Header: 'Column 3',
+        Header: 'Kategorien',
         accessor: 'tags',
       },
     ],
     []
   )
-
-  // return (
-  //   <>
-  //     <ul>
-  //       {data.map(item => (
-  //         <li key={item.mealName}>
-  //           {item.mealName}
-  //         </li>
-  //       ))}
-  //     </ul>
-  //   </>
-  // );
-
-
   const tableInstance = useTable({ columns, data })
 
   const {
@@ -66,7 +52,7 @@ function Table() {
               <th
                 {...column.getHeaderProps()}
                 style={{
-                  borderBottom: 'solid 3px red',
+                  borderBottom: 'solid 3px blue',
                   background: 'aliceblue',
                   color: 'black',
                   fontWeight: 'bold',
@@ -90,7 +76,7 @@ function Table() {
                     style={{
                       padding: '10px',
                       border: 'solid 1px gray',
-                      background: 'papayawhip',
+                      background: 'white',
                     }}
                   >
                     {cell.render('Cell')}
