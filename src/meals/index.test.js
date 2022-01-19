@@ -1,14 +1,18 @@
-import { init, getMealPlan } from './index.js'
-
-const filePath = 'meals.test.json'
+// import { init, getMealPlan } from './index.js'
+const { init, getMealPlan } = require('./index.js')
+const testServer = require('./testServer.js')
+const filePath = ''
+const baseURI = 'http://localhost:8000'
 let mealsHandler
 let mealPlan
 let meals
 
 beforeEach(async () => {
-    mealsHandler = await init(filePath)
+    testServer.start()
+    mealsHandler = await init(baseURI, filePath)
     mealPlan = getMealPlan()
     meals = mealsHandler.getAllMeals()
+    await testServer.stop()
 })
 
 test('init should return an object with a method getAllMeals', () => {

@@ -9,7 +9,9 @@ function Table() {
 
   useEffect(() => {
     async function fetchData() {
-      const mealsData = await init('meals.json')
+      const filePath = '/src/meals/resources/meals.json'
+      const baseURI = 'https://api.github.com/repos/PeregrinTooc/what-should-we-eat/contents'
+      const mealsData = await init(baseURI, filePath)
       setData(mealsData.getAllMeals())
     }
     fetchData();

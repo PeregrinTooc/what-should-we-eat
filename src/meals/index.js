@@ -1,11 +1,14 @@
 const axios = require('axios')
 const { Buffer } = require('buffer');
-async function init(mealsFilePath) {
-    const jsonArray = await axios.get('https://api.github.com/repos/PeregrinTooc/what-should-we-eat/contents/src/meals/resources/' + mealsFilePath)
+async function init(baseURI, mealsFilePath) {
+    const path = baseURI + mealsFilePath;
+    const rpc = axios.create({
+        baseURL: baseURI,
+    })
+    const jsonArray = await rpc.get(mealsFilePath)
     let encodedData = jsonArray.data.content;
     const buffer = Buffer.from(encodedData, 'base64')
     const meals = buffer.toString()
-    console.log(meals)
     return new MealsHandler(JSON.parse(meals).meals)
 }
 
@@ -30,4 +33,5 @@ class MealsHandler {
     getAllMeals() { return this._meals }
 }
 
-export { init, getMealPlan }
+//export { init, getMealPlan }
+module.exports = { init, getMealPlan }
