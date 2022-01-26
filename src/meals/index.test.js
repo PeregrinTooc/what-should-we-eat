@@ -12,6 +12,9 @@ beforeEach(async () => {
     mealsHandler = await init(baseURI, filePath)
     mealPlan = getMealPlan()
     meals = mealsHandler.getAllMeals()
+})
+
+afterEach(async () => {
     await testServer.stop()
 })
 

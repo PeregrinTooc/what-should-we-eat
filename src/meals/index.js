@@ -1,6 +1,9 @@
 const axios = require('axios')
 const { Buffer } = require('buffer');
 async function init(baseURI, mealsFilePath) {
+    if(typeof process != 'undefined'){
+  axios.defaults.adapter = require('axios/lib/adapters/http');
+}
     const path = baseURI + mealsFilePath;
     const rpc = axios.create({
         baseURL: baseURI,
