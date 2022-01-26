@@ -1,7 +1,6 @@
 import { Button, List } from './AppElements'
 import React, { useState, useEffect } from 'react';
 import { useTable } from 'react-table';
-import { init } from './meals/index.js'
 
 function Table() {
 
@@ -9,6 +8,7 @@ function Table() {
 
   useEffect(() => {
     async function fetchData() {
+      const init = require('./meals/index.js').init
       const filePath = '/src/meals/resources/meals.json'
       const baseURI = 'https://api.github.com/repos/PeregrinTooc/what-should-we-eat/contents'
       const mealsData = await init(baseURI, filePath)
