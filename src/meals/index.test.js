@@ -41,3 +41,16 @@ test("Meal Plans should have a function getMealFor", () => {
   mealPlan.addMealFor("Tuesday", { mealName: "S" });
   expect(mealPlan.getMealFor("Monday")).toEqual({ mealName: "T" });
 });
+
+test("Meal Plans should have a function getOverview", () => {
+  expect(mealPlan.getOverview()).toEqual(Array(7).fill(""));
+  mealPlan.addMealFor("mon", { mealName: "S" });
+  expect(mealPlan.getOverview()).toEqual([...["S"], ...Array(6).fill("")]);
+  mealPlan.addMealFor("tue", { mealName: "T" });
+  mealPlan.addMealFor("wed", { mealName: "U" });
+  mealPlan.addMealFor("thu", { mealName: "V" });
+  mealPlan.addMealFor("fri", { mealName: "W" });
+  mealPlan.addMealFor("sat", { mealName: "X" });
+  mealPlan.addMealFor("sun", { mealName: "Y" });
+  expect(mealPlan.getOverview()).toEqual(["S", "T", "U", "V", "W", "X", "Y"]);
+});

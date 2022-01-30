@@ -1,89 +1,70 @@
-import React, { useState, useEffect } from "react";
-import { useTable } from "react-table";
+import React, { useState } from "react";
+import "bulma/css/bulma.min.css";
+import { Form, Table } from "react-bulma-components";
 
-function Table() {
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    async function fetchData() {
-      const init = require("./../meals/index.js").init;
-      const filePath = "/src/meals/resources/meals.json";
-      const baseURI =
-        "https://api.github.com/repos/PeregrinTooc/what-should-we-eat/contents";
-      const mealsData = await init(baseURI, filePath);
-      setData(mealsData.getAllMeals());
-    }
-    fetchData();
-  }, []);
-
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: "Name",
-        accessor: "mealName", // accessor is the "key" in the data
-      },
-      {
-        Header: "Aufwand",
-        accessor: "effort",
-      },
-      {
-        Header: "Kategorien",
-        accessor: "tags",
-      },
-    ],
-    []
-  );
-  const tableInstance = useTable({ columns, data });
-
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    tableInstance;
-
+function MealsTable(args) {
+  const [subject, setSubject] = useState("");
+  const { data, mealPlanController, updateMealPlan } = args;
   return (
-    <table {...getTableProps()} style={{ border: "solid 1px blue" }}>
-      <thead>
-        {headerGroups.map((headerGroup) => (
-          <tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map((column) => (
-              <th
-                {...column.getHeaderProps()}
-                style={{
-                  borderBottom: "solid 3px blue",
-                  background: "aliceblue",
-                  color: "black",
-                  fontWeight: "bold",
-                }}
-              >
-                {column.render("Header")}
-              </th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody {...getTableBodyProps()}>
-        {rows.map((row) => {
-          prepareRow(row);
-          return (
-            <tr {...row.getRowProps()}>
-              {row.cells.map((cell) => {
-                return (
-                  <td
-                    {...cell.getCellProps()}
-                    style={{
-                      padding: "10px",
-                      border: "solid 1px gray",
-                      background: "white",
-                    }}
-                  >
-                    {cell.render("Cell")}
-                  </td>
-                );
-              })}
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+    <>
+      <Table bordered selected="false" size="narrow" striped="true">
+        <thead>{getTableHeader()}</thead>
+        <tbody>{data.map((row) => getRow(row))}</tbody>
+      </Table>
+    </>
   );
+
+  function getTableHeader() {
+    return (
+      <tr>
+        <th>
+          <abbr title="Name">Name</abbr>
+        </th>
+        <th>
+          <abbr title="Aufwand">Aufwand</abbr>
+        </th>
+        <th>
+          <abbr title="Kategorien">Kategorien</abbr>
+        </th>
+        <th>
+          <abbr title="Geplant für">Geplant für</abbr>
+        </th>
+      </tr>
+    );
+  }
+
+  function getRow(meal) {
+    return (
+      <tr>
+        <th>{meal.mealName}</th>
+        <td>{meal.effort}</td>
+        <td>{meal.tags}</td>
+        <td>
+          <form>
+            <Form.Select
+              value={subject}
+              onChange={(e) => {
+                if (e.target.value !== " ") {
+                  mealPlanController.addMealFor(e.target.value, meal);
+                  updateMealPlan(mealPlanController.getOverview());
+                }
+                return setSubject(e.target.value);
+              }}
+            >
+              <option value="nil"> </option>
+              <option value="mon">Montag</option>
+              <option value="tue">Dienstag</option>
+              <option value="wed">Mittwoch</option>
+              <option value="thu">Donnerstag</option>
+              <option value="fri">Freitag</option>
+              <option value="sat">Samstag</option>
+              <option value="sun">Sonntag</option>
+            </Form.Select>
+          </form>
+        </td>
+      </tr>
+    );
+  }
 }
 
-export default Table;
+export default MealsTable;

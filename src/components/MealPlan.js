@@ -1,18 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import "bulma/css/bulma.min.css";
-import { Form, Button, Icon, Block } from "react-bulma-components";
+import { Form } from "react-bulma-components";
 
-function Mealplan() {
-  const [mealPlan, updateMealPlan] = useState([
-    "Montagsessen",
-    "Dienstagsessen",
-    "Mittwochsessen",
-    "Donnerstagsessen",
-    "Freitagsessen",
-    "Samstagsessen",
-    "Sonntagsessen",
-  ]);
-
+function Mealplan(args) {
+  const { mealPlan } = args;
   return (
     <form>
       {createMealPlanForm("Montag", 0)}
@@ -33,13 +24,7 @@ function Mealplan() {
           <Form.Input
             color="success"
             value={mealPlan[dayNumber]}
-            onChange={(e) => {
-              return updateMealPlan([
-                ...mealPlan.slice(0, dayNumber),
-                ...[e.target.value],
-                ...mealPlan.slice(dayNumber + 1, 7),
-              ]);
-            }}
+            readOnly={true}
           />
         </Form.Control>
       </Form.Field>
