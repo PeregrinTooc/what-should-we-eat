@@ -3,7 +3,7 @@ import "bulma/css/bulma.min.css";
 import { Form } from "react-bulma-components";
 
 function Mealplan(args) {
-  const { mealPlan } = args;
+  const { mealPlan, mealPlanController, updateMealPlan } = args;
   return (
     <form>
       {createMealPlanForm("Montag", 0)}
@@ -17,6 +17,7 @@ function Mealplan(args) {
   );
 
   function createMealPlanForm(dayName, dayNumber) {
+    const days = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
     return (
       <Form.Field>
         <Form.Label>{`Essen für ${dayName}`}</Form.Label>
@@ -24,7 +25,10 @@ function Mealplan(args) {
           <Form.Input
             color="success"
             value={mealPlan[dayNumber]}
-            readOnly={true}
+            onChange={(e) => {
+              mealPlanController.addMealFor(days[dayNumber], e.target.value);
+              updateMealPlan(mealPlanController.getOverview());
+            }}
           />
         </Form.Control>
       </Form.Field>

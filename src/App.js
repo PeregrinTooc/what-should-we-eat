@@ -34,7 +34,11 @@ function App() {
           />
         </Columns.Column>
         <Columns.Column>
-          <MealPlan mealPlan={mealPlan} />
+          <MealPlan
+            mealPlan={mealPlan}
+            mealPlanController={mealPlanController}
+            updateMealPlan={updateMealPlan}
+          />
         </Columns.Column>
       </Columns>
     </div>
