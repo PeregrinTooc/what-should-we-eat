@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import "bulma/css/bulma.min.css";
 import { Form, Table } from "react-bulma-components";
 
-function MealsTable(args) {
+function MealsTable({ data, mealPlanController, updateMealPlan }) {
   const [subject, setSubject] = useState("");
-  const { data, mealPlanController, updateMealPlan } = args;
+  const days = { "nil": "", "mon": "Montag", "tue": "Dienstag", "wed": "Mittwoch", "thu": "Donnerstag", "fri": "Freitag", "sat": "Samstag", "sun": "Sonntag" }
   return (
     <>
-      <Table bordered selected="false" size="narrow" striped="true">
+      <Table bordered selected={false} size="narrow" striped={true}>
         <thead>{getTableHeader()}</thead>
         <tbody>{data.map((row) => getRow(row))}</tbody>
       </Table>
@@ -35,8 +35,8 @@ function MealsTable(args) {
 
   function getRow(meal) {
     return (
-      <tr>
-        <th>{meal.mealName}</th>
+      <tr key={meal.mealName} >
+        <td>{meal.mealName}</td>
         <td>{meal.effort}</td>
         <td>{meal.tags}</td>
         <td>

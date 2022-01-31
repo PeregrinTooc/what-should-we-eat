@@ -2,8 +2,7 @@ import React from "react";
 import "bulma/css/bulma.min.css";
 import { Form } from "react-bulma-components";
 
-function Mealplan(args) {
-  const { mealPlan, mealPlanController, updateMealPlan } = args;
+function Mealplan({ mealPlan, mealPlanController, updateMealPlan }) {
   return (
     <form>
       {createMealPlanForm("Montag", 0)}
