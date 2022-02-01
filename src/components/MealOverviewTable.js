@@ -5,6 +5,10 @@ import { Form, Table } from "react-bulma-components";
 function MealsTable({ data, mealPlanController, updateMealPlan }) {
   const [subject, setSubject] = useState("");
   const days = { "nil": "", "mon": "Montag", "tue": "Dienstag", "wed": "Mittwoch", "thu": "Donnerstag", "fri": "Freitag", "sat": "Samstag", "sun": "Sonntag" }
+  const optionTags = Object.keys(days).map((key) => {
+    return (<option key={key} value={key}>{days[key]}</option>)
+  })
+
   return (
     <>
       <Table bordered selected={false} size="narrow" striped={true}>
@@ -51,14 +55,7 @@ function MealsTable({ data, mealPlanController, updateMealPlan }) {
                 return setSubject(e.target.value);
               }}
             >
-              <option value="nil"> </option>
-              <option value="mon">Montag</option>
-              <option value="tue">Dienstag</option>
-              <option value="wed">Mittwoch</option>
-              <option value="thu">Donnerstag</option>
-              <option value="fri">Freitag</option>
-              <option value="sat">Samstag</option>
-              <option value="sun">Sonntag</option>
+              {optionTags}
             </Form.Select>
           </form>
         </td>
