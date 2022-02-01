@@ -1,6 +1,6 @@
 import { init, getMealPlan } from "./index.js";
 // const { init, getMealPlan } = require('./index.js')
-const testServer = require("./testServer.js");
+const testServer = require("../testServer.js");
 const filePath = "";
 const baseURI = "http://localhost:8000";
 let mealsHandler;

@@ -4,10 +4,23 @@ import { Form, Table } from "react-bulma-components";
 
 function MealsTable({ data, mealPlanController, updateMealPlan }) {
   const [subject, setSubject] = useState("");
-  const days = { "nil": "", "mon": "Montag", "tue": "Dienstag", "wed": "Mittwoch", "thu": "Donnerstag", "fri": "Freitag", "sat": "Samstag", "sun": "Sonntag" }
+  const days = {
+    nil: "",
+    mon: "Montag",
+    tue: "Dienstag",
+    wed: "Mittwoch",
+    thu: "Donnerstag",
+    fri: "Freitag",
+    sat: "Samstag",
+    sun: "Sonntag",
+  };
   const optionTags = Object.keys(days).map((key) => {
-    return (<option key={key} value={key}>{days[key]}</option>)
-  })
+    return (
+      <option key={key} value={key}>
+        {days[key]}
+      </option>
+    );
+  });
 
   return (
     <>
@@ -39,13 +52,14 @@ function MealsTable({ data, mealPlanController, updateMealPlan }) {
 
   function getRow(meal) {
     return (
-      <tr key={meal.mealName} >
+      <tr key={meal.mealName}>
         <td>{meal.mealName}</td>
         <td>{meal.effort}</td>
         <td>{meal.tags}</td>
         <td>
           <form>
             <Form.Select
+              data-testid="plannedFor"
               value={subject}
               onChange={(e) => {
                 if (e.target.value !== " ") {

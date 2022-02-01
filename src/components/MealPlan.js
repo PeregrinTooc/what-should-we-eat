@@ -4,24 +4,27 @@ import { Form } from "react-bulma-components";
 
 function Mealplan({ mealPlan, mealPlanController, updateMealPlan }) {
   return (
-    <form>
-      {createMealPlanForm("Montag", 0)}
-      {createMealPlanForm("Dienstag", 1)}
-      {createMealPlanForm("Mittwoch", 2)}
-      {createMealPlanForm("Donnerstag", 3)}
-      {createMealPlanForm("Freitag", 4)}
-      {createMealPlanForm("Samstag", 5)}
-      {createMealPlanForm("Sonntag", 6)}
-    </form>
+    <div>
+      <form> {createMealPlanForm("Montag", 0)}</form>
+      <form> {createMealPlanForm("Dienstag", 1)}</form>
+      <form> {createMealPlanForm("Mittwoch", 2)}</form>
+      <form> {createMealPlanForm("Donnerstag", 3)}</form>
+      <form> {createMealPlanForm("Freitag", 4)}</form>
+      <form> {createMealPlanForm("Samstag", 5)}</form>
+      <form> {createMealPlanForm("Sonntag", 6)}</form>
+    </div>
   );
 
   function createMealPlanForm(dayName, dayNumber) {
     const days = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
     return (
       <Form.Field>
-        <Form.Label>{`Essen für ${dayName}`}</Form.Label>
+        <Form.Label htmlFor={`dayNameForm-${dayName}`}>
+          {`Essen für ${dayName}`}{" "}
+        </Form.Label>
         <Form.Control>
           <Form.Input
+            id={`dayNameForm-${dayName}`}
             color="success"
             value={mealPlan[dayNumber]}
             onChange={(e) => {
