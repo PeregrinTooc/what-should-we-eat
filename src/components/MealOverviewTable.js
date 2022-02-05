@@ -71,6 +71,9 @@ function MealsTable({ availableMeals, mealPlanController, updateMealPlan }) {
         <th>
           <abbr title="Geplant für">geplant für</abbr>
         </th>
+        <th>
+          <abbr title="Wähle einen Tag">wähle einen Tag</abbr>
+        </th>
       </tr>
     );
   }

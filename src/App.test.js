@@ -106,6 +106,7 @@ test("renders table headers", async () => {
   await screen.findByText("Aufwand");
   await screen.findByText("Kategorien");
   await screen.findByText("geplant für");
+  await screen.findByText("wähle einen Tag");
 });
 
 test("renders table content", async () => {
