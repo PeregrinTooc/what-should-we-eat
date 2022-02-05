@@ -53,4 +53,3 @@ class MealsHandler {
 }
 
 export { init, getMealPlan };
-// module.exports = { init, getMealPlan };
