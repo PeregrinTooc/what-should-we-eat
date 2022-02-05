@@ -26,7 +26,7 @@ function App({ baseURI }) {
       <Heading>Was wollen wir essen?</Heading>
       <Columns>
         <Columns.Column>
-          <MealsTable data={data} {...mealPlanControl} />
+          <MealsTable availableMeals={data} {...mealPlanControl} />
         </Columns.Column>
         <Columns.Column>
           <MealPlan mealPlan={mealPlan} {...mealPlanControl} />
