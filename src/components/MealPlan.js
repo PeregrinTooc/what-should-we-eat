@@ -1,17 +1,29 @@
-import React from "react";
+import { React, useRef } from "react";
 import "bulma/css/bulma.min.css";
-import { Form } from "react-bulma-components";
+import { Form, Button } from "react-bulma-components";
 
-function Mealplan({ mealPlan, mealPlanController, updateMealPlan }) {
+function Mealplan({
+  mealPlan,
+  mealPlanController,
+  updateMealPlan,
+  saveAsImage,
+}) {
+  const printRef = useRef();
+  const handleDownloadImage = async () => {
+    await saveAsImage(printRef.current);
+  };
   return (
     <div>
-      <form> {createMealPlanForm("Montag", 0)}</form>
-      <form> {createMealPlanForm("Dienstag", 1)}</form>
-      <form> {createMealPlanForm("Mittwoch", 2)}</form>
-      <form> {createMealPlanForm("Donnerstag", 3)}</form>
-      <form> {createMealPlanForm("Freitag", 4)}</form>
-      <form> {createMealPlanForm("Samstag", 5)}</form>
-      <form> {createMealPlanForm("Sonntag", 6)}</form>
+      <div ref={printRef}>
+        <form> {createMealPlanForm("Montag", 0)}</form>
+        <form> {createMealPlanForm("Dienstag", 1)}</form>
+        <form> {createMealPlanForm("Mittwoch", 2)}</form>
+        <form> {createMealPlanForm("Donnerstag", 3)}</form>
+        <form> {createMealPlanForm("Freitag", 4)}</form>
+        <form> {createMealPlanForm("Samstag", 5)}</form>
+        <form> {createMealPlanForm("Sonntag", 6)}</form>
+      </div>
+      <Button onClick={handleDownloadImage}>Als Bild Speichern</Button>
     </div>
   );
 

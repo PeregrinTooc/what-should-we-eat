@@ -2,6 +2,7 @@ import { cleanup, render, screen } from "@testing-library/react";
 import App from "./App";
 import userEvent from "@testing-library/user-event";
 import MealsTable from "./components/MealOverviewTable";
+import Mealplan from "./components/MealPlan";
 
 const mealPlanController = require("./meals/index.js").getMealPlan();
 const testServer = require("./testServer");
@@ -127,4 +128,24 @@ test("renders table content", async () => {
   await screen.findByText("3");
   await screen.findByText("Ofengemüse mit Kartoffeln und Tzatziki");
   await screen.findByText("Kartoffeln");
+});
+
+test("renders meal plan and offers download button", async () => {
+  const mealPlan = ["Foo", "Bar", "Com", "Bat", "X", "Y", "Z"];
+  render(
+    <Mealplan
+      mealPlanController={mealPlanController}
+      updateMealPlan={() => {}}
+      saveAsImage={(element) => {
+        expect(element.childNodes).toHaveLength(7);
+      }}
+      mealPlan={mealPlan}
+    />
+  );
+  mealPlan.forEach(async (meal) => {
+    await screen.findByText(meal);
+  });
+  const button = await screen.findByRole("button");
+  expect(button.textContent).toBe("Als Bild Speichern");
+  userEvent.click(button);
 });
