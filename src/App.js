@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "bulma/css/bulma.min.css";
-import { Columns, Heading } from "react-bulma-components";
+import { Columns, Container, Heading } from "react-bulma-components";
 import MealsTable from "./components/MealOverviewTable";
 import MealPlan from "./components/MealPlan";
 import html2canvas from "html2canvas";
@@ -38,21 +38,21 @@ function App({ baseURI }) {
   }, [baseURI]);
   const mealPlanControl = { mealPlanController, updateMealPlan };
   return (
-    <div>
+    <Container>
       <Heading>Was wollen wir essen?</Heading>
-      <Columns>
-        <Columns.Column>
-          <MealsTable availableMeals={data} {...mealPlanControl} />
-        </Columns.Column>
-        <Columns.Column>
+      <Columns centered={true}>
+        <Columns.Column size={"one-quarter"}>
           <MealPlan
             mealPlan={mealPlan}
             saveAsImage={saveAsImage}
             {...mealPlanControl}
           />
         </Columns.Column>
+        <Columns.Column>
+          <MealsTable availableMeals={data} {...mealPlanControl} />
+        </Columns.Column>
       </Columns>
-    </div>
+    </Container>
   );
 }
 
