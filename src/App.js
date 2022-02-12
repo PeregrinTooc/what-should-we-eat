@@ -27,8 +27,7 @@ function App({ baseURI }) {
   useEffect(() => {
     async function fetchData() {
       const init = require("./meals/index.js").init;
-      const filePath = "/src/meals/resources/meals.json";
-      const mealHandler = await init(baseURI, filePath);
+      const mealHandler = await init(baseURI);
       setData(mealHandler.getAllMeals());
     }
     fetchData();

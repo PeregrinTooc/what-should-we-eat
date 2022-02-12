@@ -1,6 +1,5 @@
 import { init, getMealPlan } from "./index.js";
 const testServer = require("../testServer.js");
-const filePath = "";
 const baseURI = "http://localhost:8000";
 let mealsHandler;
 let mealPlan;
@@ -8,7 +7,7 @@ let meals;
 
 beforeEach(async () => {
   testServer.start();
-  mealsHandler = await init(baseURI, filePath);
+  mealsHandler = await init(baseURI);
   mealPlan = getMealPlan();
   meals = mealsHandler.getAllMeals();
 });

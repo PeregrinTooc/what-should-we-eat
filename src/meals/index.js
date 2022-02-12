@@ -1,13 +1,13 @@
 const axios = require("axios");
 const { Buffer } = require("buffer");
-async function init(baseURI, mealsFilePath) {
+async function init(baseURI) {
   if (typeof process != "undefined") {
     axios.defaults.adapter = require("axios/lib/adapters/http");
   }
   const rpc = axios.create({
     baseURL: baseURI,
   });
-  const jsonArray = await rpc.get(mealsFilePath);
+  const jsonArray = await rpc.get("/");
   let encodedData = jsonArray.data.content;
   const buffer = Buffer.from(encodedData, "base64");
   const meals = buffer.toString();

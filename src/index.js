@@ -6,11 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App
-      baseURI={
-        "https://api.github.com/repos/PeregrinTooc/what-should-we-eat/contents"
-      }
-    />
+    <App baseURI={"https://dour-vivacious-daemonosaurus.glitch.me/"} />
   </React.StrictMode>,
   document.getElementById("root")
 );
