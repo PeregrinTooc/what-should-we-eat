@@ -26,13 +26,13 @@ function App({ baseURI }) {
   };
   useEffect(() => {
     async function fetchData() {
-      const init = require("./meals/index.js").init;
+      const init = require("../meals/index.js").init;
       const filePath = "/src/meals/resources/meals.json";
       const mealHandler = await init(baseURI, filePath);
       setData(mealHandler.getAllMeals());
     }
     fetchData();
-    const mealPlanController = require("./meals/index.js").getMealPlan();
+    const mealPlanController = require("../meals/index.js").getMealPlan();
     updateMealPlan(mealPlanController.getOverview());
     updateMealPlanController(mealPlanController);
   }, [baseURI]);
