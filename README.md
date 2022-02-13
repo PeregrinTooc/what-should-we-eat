@@ -1,2 +1,2 @@
-# Plan your meals for the weak!
+# Plan your meals for the week!
 
