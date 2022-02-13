@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "bulma/css/bulma.min.css";
-import { Form, Table } from "react-bulma-components";
+import { Columns, Form, Table } from "react-bulma-components";
 
 function MealsTable({ availableMeals, mealPlanController, updateMealPlan }) {
   const days = [
@@ -16,21 +16,78 @@ function MealsTable({ availableMeals, mealPlanController, updateMealPlan }) {
   ];
   const [availableDays, setAvailableDays] = useState(days);
   const [tableData, setTableData] = useState([]);
+  const [unfilteredData, setUnfilteredData] = useState([]);
   const [options, setOptions] = useState();
+  const [filter, setFilter] = useState({ mealName: "", effort: "", tags: "" });
   useEffect(() => {
     setOptions(calculateOptions(availableDays));
   }, [availableDays]);
   useEffect(() => {
     if (availableMeals) {
-      setTableData(
-        availableMeals.map((meal) => {
-          return { ...meal, plannedForDay: "" };
-        })
-      );
+      const initialTableData = availableMeals.map((meal) => {
+        return { ...meal, plannedForDay: "" };
+      });
+      setTableData(initialTableData);
+      setUnfilteredData(initialTableData);
     }
   }, [availableMeals]);
+  useEffect(() => {
+    setTableData(
+      [...unfilteredData].filter((meal) => {
+        return (
+          meal.mealName.startsWith(filter.mealName) &&
+          meal.tags.startsWith(filter.tags)
+        );
+      })
+    );
+  }, [filter, unfilteredData]);
+
   return (
     <>
+      <Columns centered={true}>
+        <Columns.Column size={"one-quarter"}>
+          <Form.Field>
+            <Form.Label htmlFor="NameFilter">{`Name`}</Form.Label>
+            <Form.Input
+              id="NameFilter"
+              onChange={(e) => {
+                const value = e.target.value;
+                let newFilter = { ...filter };
+                newFilter.mealName = value;
+                setFilter(newFilter);
+              }}
+            ></Form.Input>
+          </Form.Field>
+        </Columns.Column>
+        <Columns.Column size={"one-quarter"}>
+          <Form.Field>
+            <Form.Label htmlFor="EffortFilter">{`Aufwand`} </Form.Label>
+            <Form.Input id="EffortFilter"></Form.Input>
+          </Form.Field>
+        </Columns.Column>
+        <Columns.Column size={"one-quarter"}>
+          <Form.Field>
+            <Form.Label htmlFor="TagFilter">{`Kategorien`} </Form.Label>
+            <Form.Input
+              id="TagFilter"
+              onChange={(e) => {
+                const value = e.target.value;
+                let newFilter = { ...filter };
+                newFilter.tags = value;
+                setFilter(newFilter);
+              }}
+            ></Form.Input>
+          </Form.Field>
+        </Columns.Column>
+        <Columns.Column size={"one-quarter"}>
+          <Form.Field>
+            <Form.Label htmlFor="HealthLevelFilter">
+              {`Gesundheitslevel`}{" "}
+            </Form.Label>
+            <Form.Input id="HealthLevelFilter"></Form.Input>
+          </Form.Field>
+        </Columns.Column>
+      </Columns>
       <Table bordered selected={false} size="narrow" striped={true}>
         <thead>{getTableHeader()}</thead>
         <tbody>{tableData.map((row) => getRow(row))}</tbody>
