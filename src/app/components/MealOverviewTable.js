@@ -35,7 +35,7 @@ function MealsTable({ availableMeals, mealPlanController, updateMealPlan }) {
     setTableData(
       [...unfilteredData].filter((meal) => {
         return (
-          meal.mealName.startsWith(filter.mealName) &&
+          meal.mealName.toLowerCase().includes(filter.mealName.toLowerCase()) &&
           meal.tags.startsWith(filter.tags)
         );
       })
@@ -166,7 +166,7 @@ function MealsTable({ availableMeals, mealPlanController, updateMealPlan }) {
           }
         }
         setAvailableDays(newDays);
-        return () => {};
+        return () => { };
 
         function restoreDayToOptionsAndUpdateTable() {
           newDays = [...availableDays, restoreDay()];

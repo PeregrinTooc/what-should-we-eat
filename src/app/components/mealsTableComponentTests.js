@@ -79,6 +79,17 @@ it("filters by values", async () => {
   expect(screen.queryByText("Foo")).not.toBeInTheDocument();
 });
 
+it('filter meals case-tolerant by contains', async () => {
+  renderTable(minimalMeals)
+  const nameFilter = screen.getByLabelText("Name");
+  userEvent.type(nameFilter, "o");
+  expect(screen.getByText("Foo")).toBeDefined();
+  userEvent.clear(nameFilter);
+  userEvent.type(nameFilter, "O");
+  expect(screen.getByText("Foo")).toBeDefined();
+});
+
+
 function renderEmptyTable() {
   renderTable([]);
 }
@@ -88,7 +99,7 @@ function renderTable(availableMeals) {
     <MealsTable
       availableMeals={availableMeals}
       mealPlanController={mealPlanController}
-      updateMealPlan={() => {}}
+      updateMealPlan={() => { }}
     />
   );
 }
