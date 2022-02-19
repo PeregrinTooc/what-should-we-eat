@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/what-should-we-eat/static/css/main.2be145b5.css",
-    "main.js": "/what-should-we-eat/static/js/main.c4191329.js",
+    "main.css": "/what-should-we-eat/static/css/main.f2a760e7.css",
+    "main.js": "/what-should-we-eat/static/js/main.6397a475.js",
     "static/js/787.3c6e25c4.chunk.js": "/what-should-we-eat/static/js/787.3c6e25c4.chunk.js",
     "index.html": "/what-should-we-eat/index.html",
-    "main.2be145b5.css.map": "/what-should-we-eat/static/css/main.2be145b5.css.map",
-    "main.c4191329.js.map": "/what-should-we-eat/static/js/main.c4191329.js.map",
+    "main.f2a760e7.css.map": "/what-should-we-eat/static/css/main.f2a760e7.css.map",
+    "main.6397a475.js.map": "/what-should-we-eat/static/js/main.6397a475.js.map",
     "787.3c6e25c4.chunk.js.map": "/what-should-we-eat/static/js/787.3c6e25c4.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.2be145b5.css",
-    "static/js/main.c4191329.js"
+    "static/css/main.f2a760e7.css",
+    "static/js/main.6397a475.js"
   ]
 }
