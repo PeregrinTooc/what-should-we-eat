@@ -50,6 +50,14 @@ class MealsHandler {
   getAllMeals() {
     return this._meals;
   }
+  modifyMeal(meal) {
+    this._meals = this._meals.map((m) => {
+      if (m.mealName === meal.mealName) {
+        return meal;
+      }
+      return m;
+    });
+  }
 }
 
 export { init, getMealPlan };

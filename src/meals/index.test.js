@@ -26,9 +26,9 @@ test("getAllMeals should return an array of meals", () => {
   expect(meals).toBeDefined();
   expect(meals[0]).toEqual({
     mealName: "Ofengemüse mit Kartoffeln und Tzatziki",
-    effort: "3",
-    tags: "Kartoffeln",
-    helthLevel: "7",
+    effort: 3,
+    tags: ["Kartoffeln"],
+    healthLevel: 7,
   });
 });
 
@@ -52,4 +52,15 @@ test("Meal Plans should have a function getOverview", () => {
   mealPlan.addMealFor("sat", { mealName: "X" });
   mealPlan.addMealFor("sun", { mealName: "Y" });
   expect(mealPlan.getOverview()).toEqual(["S", "T", "U", "V", "W", "X", "Y"]);
+});
+
+test("meal handler should be able to update a meal", () => {
+  let meal = { ...meals[0] };
+  meal.effort = 4;
+  meal.healthLevel = 8;
+  meal.tags = ["Ofen", ...meal.tags];
+  mealsHandler.modifyMeal(meal);
+  meals = mealsHandler.getAllMeals();
+  expect(meals[0]).toEqual(meal);
+  expect(meals).toHaveLength(1);
 });

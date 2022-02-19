@@ -2,9 +2,9 @@
   "meals": [
     {
       "mealName": "Ofengemüse mit Kartoffeln und Tzatziki",
-      "effort": "3",
-      "tags": "Kartoffeln",
-      "helthLevel": "7"
+      "effort": 3,
+      "tags": ["Kartoffeln"],
+      "healthLevel": 7
     }
   ]
 }

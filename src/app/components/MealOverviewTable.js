@@ -36,7 +36,9 @@ function MealsTable({ availableMeals, mealPlanController, updateMealPlan }) {
       [...unfilteredData].filter((meal) => {
         return (
           meal.mealName.toLowerCase().includes(filter.mealName.toLowerCase()) &&
-          meal.tags.startsWith(filter.tags)
+          meal.tags.filter((tag) => {
+            return tag.toLowerCase().startsWith(filter.tags.toLowerCase());
+          }).length > 0
         );
       })
     );
@@ -44,27 +46,45 @@ function MealsTable({ availableMeals, mealPlanController, updateMealPlan }) {
 
   return (
     <>
+      {getFilterBar()}
+      {getMealsTable()}
+    </>
+  );
+
+  function getMealsTable() {
+    return (
+      <Table bordered selected={false} size="narrow" striped={true}>
+        <thead>{getTableHeader()}</thead>
+        <tbody>{tableData.map((row) => getRow(row))}</tbody>
+      </Table>
+    );
+  }
+
+  function getFilterBar() {
+    return (
       <Columns centered={true}>
+        {getNameFilter()}
+        {getEffortFilter()}
+        {getTagFilter()}
+        {getHealthLevelFilter()}
+      </Columns>
+    );
+
+    function getHealthLevelFilter() {
+      return (
         <Columns.Column size={"one-quarter"}>
           <Form.Field>
-            <Form.Label htmlFor="NameFilter">{`Name`}</Form.Label>
-            <Form.Input
-              id="NameFilter"
-              onChange={(e) => {
-                const value = e.target.value;
-                let newFilter = { ...filter };
-                newFilter.mealName = value;
-                setFilter(newFilter);
-              }}
-            ></Form.Input>
+            <Form.Label htmlFor="HealthLevelFilter">
+              {`Gesundheitslevel`}{" "}
+            </Form.Label>
+            <Form.Input id="HealthLevelFilter"></Form.Input>
           </Form.Field>
         </Columns.Column>
-        <Columns.Column size={"one-quarter"}>
-          <Form.Field>
-            <Form.Label htmlFor="EffortFilter">{`Aufwand`} </Form.Label>
-            <Form.Input id="EffortFilter"></Form.Input>
-          </Form.Field>
-        </Columns.Column>
+      );
+    }
+
+    function getTagFilter() {
+      return (
         <Columns.Column size={"one-quarter"}>
           <Form.Field>
             <Form.Label htmlFor="TagFilter">{`Kategorien`} </Form.Label>
@@ -79,21 +99,39 @@ function MealsTable({ availableMeals, mealPlanController, updateMealPlan }) {
             ></Form.Input>
           </Form.Field>
         </Columns.Column>
+      );
+    }
+
+    function getEffortFilter() {
+      return (
         <Columns.Column size={"one-quarter"}>
           <Form.Field>
-            <Form.Label htmlFor="HealthLevelFilter">
-              {`Gesundheitslevel`}{" "}
-            </Form.Label>
-            <Form.Input id="HealthLevelFilter"></Form.Input>
+            <Form.Label htmlFor="EffortFilter">{`Aufwand`} </Form.Label>
+            <Form.Input id="EffortFilter"></Form.Input>
           </Form.Field>
         </Columns.Column>
-      </Columns>
-      <Table bordered selected={false} size="narrow" striped={true}>
-        <thead>{getTableHeader()}</thead>
-        <tbody>{tableData.map((row) => getRow(row))}</tbody>
-      </Table>
-    </>
-  );
+      );
+    }
+
+    function getNameFilter() {
+      return (
+        <Columns.Column size={"one-quarter"}>
+          <Form.Field>
+            <Form.Label htmlFor="NameFilter">{`Name`}</Form.Label>
+            <Form.Input
+              id="NameFilter"
+              onChange={(e) => {
+                const value = e.target.value;
+                let newFilter = { ...filter };
+                newFilter.mealName = value;
+                setFilter(newFilter);
+              }}
+            ></Form.Input>
+          </Form.Field>
+        </Columns.Column>
+      );
+    }
+  }
 
   function calculateOptions(days) {
     let sortedDays = [...days];
@@ -166,7 +204,7 @@ function MealsTable({ availableMeals, mealPlanController, updateMealPlan }) {
           }
         }
         setAvailableDays(newDays);
-        return () => { };
+        return () => {};
 
         function restoreDayToOptionsAndUpdateTable() {
           newDays = [...availableDays, restoreDay()];
