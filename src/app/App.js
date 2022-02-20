@@ -6,9 +6,9 @@ import MealPlan from "./components/MealPlan";
 import html2canvas from "html2canvas";
 
 function App({ baseURI }) {
-  const [data, setData] = useState([]);
   const [mealPlan, updateMealPlan] = useState(Array(7).fill(""));
   const [mealPlanController, updateMealPlanController] = useState();
+  const [mealHandler, setMealHandler] = useState();
   const saveAsImage = async (element) => {
     const canvas = await html2canvas(element);
     const data = canvas.toDataURL("image/png");
@@ -28,8 +28,7 @@ function App({ baseURI }) {
     async function fetchData() {
       const init = require("../meals/index.js").init;
       const filePath = "/src/meals/resources/meals.json";
-      const mealHandler = await init(baseURI, filePath);
-      setData(mealHandler.getAllMeals());
+      setMealHandler(await init(baseURI, filePath));
     }
     fetchData();
     const mealPlanController = require("../meals/index.js").getMealPlan();
@@ -49,7 +48,7 @@ function App({ baseURI }) {
           />
         </Columns.Column>
         <Columns.Column>
-          <MealsTable availableMeals={data} {...mealPlanControl} />
+          <MealsTable {...mealPlanControl} mealHandler={mealHandler} />
         </Columns.Column>
       </Columns>
     </Container>

@@ -48,15 +48,33 @@ it("renders table headers", async () => {
 });
 it("renders table content", async () => {
   renderTable(minimalMeals);
-  await screen.findByText("3");
+  await screen.getByDisplayValue("3");
   await screen.findByText("Foo");
   await screen.findByText("Kartoffeln");
 });
 
-xit("allows changing of effort", async () => {
+it("allows changing of effort", async () => {
   renderTable(minimalMeals);
-  let effortField = await screen.findByText("3");
-  userEvent.clear(effortField);
+  let effortInput = await screen.getByDisplayValue("3");
+  userEvent.clear(effortInput);
+  expect(screen.queryByDisplayValue(3)).not.toBeInTheDocument();
+  userEvent.type(effortInput, "2");
+  expect(screen.queryByDisplayValue("2")).toBeInTheDocument();
+});
+
+it("allows only empty or values between 1 and 10 for effort", async () => {
+  renderTable(minimalMeals);
+  let effortInput = await screen.getByDisplayValue("3");
+  expect(effortInput).toHaveAttribute("placeHolder", "Werte zwischen 1 und 10");
+  userEvent.clear(effortInput);
+  userEvent.type(effortInput, "a");
+  expect(screen.queryByDisplayValue("a")).not.toBeInTheDocument();
+  userEvent.type(effortInput, "12");
+  expect(screen.queryByDisplayValue("12")).not.toBeInTheDocument();
+  expect(screen.queryByDisplayValue("1")).toBeInTheDocument();
+  userEvent.clear(effortInput);
+  userEvent.type(effortInput, "0");
+  expect(screen.queryByDisplayValue("0")).not.toBeInTheDocument();
 });
 
 it("renders a filter bar", async () => {
@@ -117,11 +135,12 @@ function renderEmptyTable() {
 }
 
 function renderTable(availableMeals) {
+  const MealsHandler = require("../../meals/index").MealsHandler;
   render(
     <MealsTable
-      availableMeals={availableMeals}
       mealPlanController={mealPlanController}
       updateMealPlan={() => {}}
+      mealHandler={new MealsHandler(availableMeals)}
     />
   );
 }

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "bulma/css/bulma.min.css";
 import { Columns, Form, Table } from "react-bulma-components";
 
-function MealsTable({ availableMeals, mealPlanController, updateMealPlan }) {
+function MealsTable({ mealPlanController, updateMealPlan, mealHandler }) {
   const days = [
     { key: "nil", value: "", pos: 0 },
     { key: "mon", value: "Montag", pos: 1 },
@@ -15,23 +15,13 @@ function MealsTable({ availableMeals, mealPlanController, updateMealPlan }) {
     { key: "del", value: "abwählen", pos: 8 },
   ];
   const [availableDays, setAvailableDays] = useState(days);
+  const [meals, setMeals] = useState();
   const [tableData, setTableData] = useState([]);
   const [unfilteredData, setUnfilteredData] = useState([]);
   const [options, setOptions] = useState();
   const [filter, setFilter] = useState({ mealName: "", effort: "", tags: "" });
-  useEffect(() => {
-    setOptions(calculateOptions(availableDays));
-  }, [availableDays]);
-  useEffect(() => {
-    if (availableMeals) {
-      const initialTableData = availableMeals.map((meal) => {
-        return { ...meal, plannedForDay: "" };
-      });
-      setTableData(initialTableData);
-      setUnfilteredData(initialTableData);
-    }
-  }, [availableMeals]);
-  useEffect(() => {
+
+  const applyFilter = useCallback(() => {
     setTableData(
       [...unfilteredData].filter((meal) => {
         return (
@@ -47,6 +37,26 @@ function MealsTable({ availableMeals, mealPlanController, updateMealPlan }) {
     );
   }, [filter, unfilteredData]);
 
+  useEffect(() => {
+    setOptions(calculateOptions(availableDays));
+  }, [availableDays]);
+  useEffect(() => {
+    if (meals) {
+      const initialTableData = meals.map((meal) => {
+        return { ...meal, plannedForDay: "" };
+      });
+      setUnfilteredData(initialTableData);
+    }
+  }, [meals]);
+  useEffect(() => {
+    if (mealHandler) {
+      setMeals(mealHandler.getAllMeals());
+    }
+  }, [mealHandler]);
+
+  useEffect(() => {
+    applyFilter();
+  }, [applyFilter, filter, unfilteredData]);
   return (
     <>
       {getFilterBar()}
@@ -178,16 +188,51 @@ function MealsTable({ availableMeals, mealPlanController, updateMealPlan }) {
 
   function getRow(meal) {
     return (
-      <tr key={meal.mealName}>
+      <tr role="row" key={meal.mealName}>
         <td>{meal.mealName}</td>
-        <td>{meal.effort}</td>
-        <td>{getTags()}</td>
-        <td>{getPlannedForDay()}</td>
-        <td>
+        <td role="cell">{getEffort()}</td>
+        <td role="cell">{getTags()}</td>
+        <td role="cell">{getPlannedForDay()}</td>
+        <td role="cell">
           <form>{getSelect()}</form>
         </td>
       </tr>
     );
+
+    function getEffort() {
+      return (
+        <Form.Input
+          id={`${meal.name}-effortInput`}
+          value={getEffortValue()}
+          placeholder="Werte zwischen 1 und 10"
+          onChange={(e) => {
+            const value = e.target.value;
+            const NumericValue = parseInt(value);
+            const input = document.getElementById(`${meal.name}-effortInput`);
+            if (
+              (value !== "" && isNaN(NumericValue)) ||
+              NumericValue > 10 ||
+              NumericValue === 0
+            ) {
+              input.classList.add("is-danger");
+            } else {
+              input.classList.remove("is-danger");
+              let updatedMeal = { ...meal };
+              updatedMeal.effort = value;
+              mealHandler.modifyMeal(updatedMeal);
+              setMeals(mealHandler.getAllMeals());
+            }
+          }}
+        ></Form.Input>
+      );
+
+      function getEffortValue() {
+        if (meal.effort) {
+          return meal.effort;
+        }
+        return "";
+      }
+    }
 
     function getTags() {
       if (meal.tags.length > 0) {

@@ -60,4 +60,4 @@ class MealsHandler {
   }
 }
 
-export { init, getMealPlan };
+export { init, getMealPlan, MealsHandler };
