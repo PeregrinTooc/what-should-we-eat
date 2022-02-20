@@ -35,10 +35,13 @@ function MealsTable({ availableMeals, mealPlanController, updateMealPlan }) {
     setTableData(
       [...unfilteredData].filter((meal) => {
         return (
-          meal.mealName.toLowerCase().includes(filter.mealName.toLowerCase()) &&
-          meal.tags.filter((tag) => {
-            return tag.toLowerCase().startsWith(filter.tags.toLowerCase());
-          }).length > 0
+          (meal.mealName
+            .toLowerCase()
+            .includes(filter.mealName.toLowerCase()) &&
+            meal.tags.filter((tag) => {
+              return tag.toLowerCase().startsWith(filter.tags.toLowerCase());
+            }).length > 0) ||
+          meal.tags.length === 0
         );
       })
     );
@@ -178,13 +181,20 @@ function MealsTable({ availableMeals, mealPlanController, updateMealPlan }) {
       <tr key={meal.mealName}>
         <td>{meal.mealName}</td>
         <td>{meal.effort}</td>
-        <td>{meal.tags}</td>
+        <td>{getTags()}</td>
         <td>{getPlannedForDay()}</td>
         <td>
           <form>{getSelect()}</form>
         </td>
       </tr>
     );
+
+    function getTags() {
+      if (meal.tags.length > 0) {
+        return meal.tags[0];
+      }
+      return "";
+    }
 
     function getSelect() {
       function onSelectionChange(e) {

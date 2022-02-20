@@ -100,6 +100,18 @@ it("filters meals by tags case-tolerant by beginning", async () => {
   expect(screen.getByText("Foo")).toBeDefined();
 });
 
+it("does not filter meals without tags", async () => {
+  renderTable([
+    {
+      mealName: "Foo",
+      effort: 3,
+      tags: [],
+      helthLevel: 7,
+    },
+  ]);
+  expect(screen.getByText("Foo")).toBeDefined();
+});
+
 function renderEmptyTable() {
   renderTable([]);
 }
