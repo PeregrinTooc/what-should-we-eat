@@ -75,6 +75,9 @@ it("allows only empty or values between 1 and 10 for effort", async () => {
   userEvent.clear(effortInput);
   userEvent.type(effortInput, "0");
   expect(screen.queryByDisplayValue("0")).not.toBeInTheDocument();
+  userEvent.clear(effortInput);
+  userEvent.type(effortInput, '2"a');
+  expect(screen.queryByDisplayValue('2"a')).not.toBeInTheDocument();
 });
 
 it("renders a filter bar", async () => {

@@ -202,21 +202,23 @@ function MealsTable({ mealPlanController, updateMealPlan, mealHandler }) {
     function getEffort() {
       return (
         <Form.Input
-          id={`${meal.name}-effortInput`}
+          id={`${meal.mealName}-effortInput`}
           value={getEffortValue()}
           placeholder="Werte zwischen 1 und 10"
           onChange={(e) => {
             const value = e.target.value;
-            const NumericValue = parseInt(value);
-            const input = document.getElementById(`${meal.name}-effortInput`);
+            const NumericValue = Number(value);
+            const input = document.getElementById(
+              `${meal.mealName}-effortInput`
+            );
             if (
-              (value !== "" && isNaN(NumericValue)) ||
-              NumericValue > 10 ||
-              NumericValue === 0
+              value.length > 0 &&
+              (isNaN(NumericValue) || NumericValue > 10 || NumericValue === 0)
             ) {
               input.classList.add("is-danger");
             } else {
               input.classList.remove("is-danger");
+              input.classList.add("is-success");
               let updatedMeal = { ...meal };
               updatedMeal.effort = value;
               mealHandler.modifyMeal(updatedMeal);
