@@ -3,109 +3,109 @@
     {
       "mealName": "Ofengemüse mit Kartoffeln und Tzatziki",
       "effort": null,
-      "tags": [],
+      "tags": ["Kartoffeln", "Ofen"],
       "healthLevel": null
     },
     {
       "mealName": "Kürbis-Gnocchi-Auflauf",
       "effort": null,
-      "tags": [],
+      "tags": ["Ofen"],
       "healthLevel": null
     },
     {
       "mealName": "Linsenbolognese",
       "effort": null,
-      "tags": [],
+      "tags": ["Pasta"],
       "healthLevel": null
     },
     {
       "mealName": "Süßkartoffel-Erdnuss-Curry",
       "effort": null,
-      "tags": [],
+      "tags": ["Curry"],
       "healthLevel": null
     },
     {
       "mealName": "Wirsing mit Kartoffeln",
       "effort": null,
-      "tags": [],
+      "tags": ["Kartoffeln"],
       "healthLevel": 9
     },
     {
       "mealName": "Grünkohl mit Kartoffeln",
       "effort": null,
-      "tags": [],
+      "tags": ["Kartoffeln"],
       "healthLevel": 10
     },
     {
       "mealName": "Linsensuppe mit Pilzen",
       "effort": null,
-      "tags": [],
+      "tags": ["Suppe"],
       "healthLevel": 10
     },
     {
       "mealName": "Linsensuppe klassisch",
       "effort": null,
-      "tags": [],
+      "tags": ["Suppe"],
       "healthLevel": 10
     },
     {
       "mealName": "Linsensuppe marokkanisch",
       "effort": null,
-      "tags": [],
+      "tags": ["Suppe"],
       "healthLevel": 10
     },
     {
       "mealName": "Erbsensuppe",
       "effort": null,
-      "tags": [],
+      "tags": ["Suppe"],
       "healthLevel": 10
     },
     {
       "mealName": "Spinatsauce",
       "effort": null,
-      "tags": [],
+      "tags": ["Pasta"],
       "healthLevel": 7
     },
     {
       "mealName": "Pilzsauce",
       "effort": null,
-      "tags": [],
+      "tags": ["Pasta"],
       "healthLevel": 7
     },
     {
       "mealName": "Burger",
       "effort": null,
-      "tags": [],
+      "tags": ["Fast-Food"],
       "healthLevel": 5
     },
     {
       "mealName": "Curry mit Gemüse und Tofu und Reise",
       "effort": null,
-      "tags": [],
+      "tags": ["Curry"],
       "healthLevel": null
     },
     {
       "mealName": "Curry mit Gemüse und Tofu und Mie-Nudeln",
       "effort": null,
-      "tags": [],
+      "tags": ["Curry"],
       "healthLevel": null
     },
     {
       "mealName": "Salat mit Pilzen Tofu und Nüssen",
       "effort": null,
-      "tags": [],
+      "tags": ["Salat"],
       "healthLevel": null
     },
     {
       "mealName": "Salat mit Avocado und Kernen und Eierdressing",
       "effort": null,
-      "tags": [],
+      "tags": ["Salat"],
       "healthLevel": null
     },
     {
       "mealName": "Nudelsalat mit Pesto Tomaten und Pinienkernen",
       "effort": null,
-      "tags": [],
+      "tags": ["Salat", "Pasta"],
       "healthLevel": null
     },
     {
@@ -117,19 +117,19 @@
     {
       "mealName": "Kartoffelsuppe",
       "effort": null,
-      "tags": [],
+      "tags": ["Kartoffeln", "Suppe"],
       "healthLevel": null
     },
     {
       "mealName": "Butterbohnensuppe",
       "effort": null,
-      "tags": [],
+      "tags": ["Suppe"],
       "healthLevel": null
     },
     {
       "mealName": "Tomatensauce",
       "effort": null,
-      "tags": [],
+      "tags": ["Pasta"],
       "healthLevel": null
     },
     {
@@ -141,37 +141,37 @@
     {
       "mealName": "Lasagne mit Zucchini und Linsen",
       "effort": null,
-      "tags": [],
+      "tags": ["Pasta","Ofen"],
       "healthLevel": null
     },
     {
       "mealName": "Nudelauflauf",
       "effort": null,
-      "tags": [],
+      "tags": ["Pasta", "Ofen"],
       "healthLevel": null
     },
     {
       "mealName": "Blumenkohl-Kartoffel-Auflauf",
       "effort": null,
-      "tags": [],
+      "tags": ["Kartoffeln","Ofen"],
       "healthLevel": 9
     },
     {
       "mealName": "Kartoffel-Lauch-Suppe (mit Linsen)",
       "effort": null,
-      "tags": [],
+      "tags": ["Kartoffeln","Suppe"],
       "healthLevel": 9
     },
     {
       "mealName": "\"Spaghetti Polpette \"",
       "effort": null,
-      "tags": [],
+      "tags": ["Pasta"],
       "healthLevel": null
     },
     {
       "mealName": "Spaghetti Carbonara",
       "effort": null,
-      "tags": [],
+      "tags": ["Pasta"],
       "healthLevel": null
     },
     {
@@ -183,13 +183,13 @@
     {
       "mealName": "Asia-Salat",
       "effort": null,
-      "tags": [],
+      "tags": ["Salat"],
       "healthLevel": null
     },
     {
       "mealName": "Falaffel",
       "effort": null,
-      "tags": [],
+      "tags": ["Fast-Food"],
       "healthLevel": null
     },
     {
@@ -201,13 +201,13 @@
     {
       "mealName": "Wassermelonen, Gurken und Tomatensalat",
       "effort": null,
-      "tags": [],
-      "healthLevel\r": ""
+      "tags": ["Salat"],
+      "healthLevel": ""
     },
     {
       "mealName": "Asia-Gemüsesuppe mit Reis",
       "effort": null,
-      "tags": [],
+      "tags": ["Suppe"],
       "healthLevel": 10
     },
     {
@@ -225,7 +225,7 @@
     {
       "mealName": "Gemüsecremesuppe",
       "effort": null,
-      "tags": [],
+      "tags": ["Suppe"],
       "healthLevel": 9
     },
     {
@@ -243,25 +243,25 @@
     {
       "mealName": "Kichererbsensuppe",
       "effort": null,
-      "tags": [],
+      "tags": ["Suppe"],
       "healthLevel": null
     },
     {
       "mealName": "Kichererbsendal in Tomatensauce",
       "effort": null,
-      "tags": [],
+      "tags": ["Curry"],
       "healthLevel": null
     },
     {
       "mealName": "Linsendal in Cashewsauce",
       "effort": null,
-      "tags": [],
+      "tags": ["Curry"],
       "healthLevel": null
     },
     {
       "mealName": "Kartoffeln mit Spinat und Kichererbsen-Rührei",
       "effort": null,
-      "tags": [],
+      "tags": ["Kartoffeln"],
       "healthLevel": null
     },
     {
@@ -279,7 +279,7 @@
     {
       "mealName": "Möhrengemüse durcheinander",
       "effort": null,
-      "tags": [],
+      "tags": ["Kartoffeln"],
       "healthLevel\r": "10"
     }
   ]
