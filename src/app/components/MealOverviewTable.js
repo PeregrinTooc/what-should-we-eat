@@ -191,7 +191,7 @@ function MealsTable({ mealPlanController, updateMealPlan, mealHandler }) {
       <tr role="row" key={meal.mealName}>
         <td>{meal.mealName}</td>
         <td role="cell">{getEffort()}</td>
-        <td role="cell">{getTags()}</td>
+        <td role="cell">{getTagContainer()}</td>
         <td role="cell">{getPlannedForDay()}</td>
         <td role="cell">
           <form>{getSelect()}</form>
@@ -236,11 +236,19 @@ function MealsTable({ mealPlanController, updateMealPlan, mealHandler }) {
       }
     }
 
-    function getTags() {
-      if (meal.tags.length > 0) {
-        return meal.tags[0];
-      }
-      return "";
+    function getTagContainer() {
+      return (
+        <div className="tags">
+          {meal.tags.map((tag) => {
+            return (
+              <span className="tag" key={tag}>
+                {tag}
+                {/* <button className="delete is-small"></button> */}
+              </span>
+            );
+          })}
+        </div>
+      );
     }
 
     function getSelect() {
