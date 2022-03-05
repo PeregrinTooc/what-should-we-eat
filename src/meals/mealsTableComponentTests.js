@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import userEvent from "@testing-library/user-event";
-import MealsTable from "./MealOverviewTable";
-import { mealPlanController } from "../App.test";
+import MealsTable from "./MealsTable";
+import { mealPlanController } from "../app/App.test";
 
 const minimalMeals = [
   {
@@ -138,7 +138,7 @@ function renderEmptyTable() {
 }
 
 function renderTable(availableMeals) {
-  const Meals = require("../../meals/index").Meals;
+  const Meals = require("./index").Meals;
   render(
     <MealsTable
       mealPlanController={mealPlanController}

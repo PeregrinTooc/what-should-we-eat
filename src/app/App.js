@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "bulma/css/bulma.min.css";
 import { Columns, Container, Heading } from "react-bulma-components";
-import MealsTable from "./components/MealOverviewTable";
 import MealPlan from "./components/MealPlan";
 import html2canvas from "html2canvas";
 
 function App({ baseURI }) {
   const [mealPlan, updateMealPlan] = useState(Array(7).fill(""));
   const [mealPlanController, updateMealPlanController] = useState();
-  const [mealHandler, setMealHandler] = useState();
+  const [meals, setMealHandler] = useState();
   const saveAsImage = async (element) => {
     const canvas = await html2canvas(element);
     const data = canvas.toDataURL("image/png");
@@ -48,7 +47,7 @@ function App({ baseURI }) {
           />
         </Columns.Column>
         <Columns.Column>
-          <MealsTable {...mealPlanControl} mealHandler={mealHandler} />
+          {meals ? meals.renderAsTable({ ...mealPlanControl }) : null}
         </Columns.Column>
       </Columns>
     </Container>

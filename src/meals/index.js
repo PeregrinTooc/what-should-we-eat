@@ -1,3 +1,4 @@
+import MealsTable from "./MealsTable";
 const axios = require("axios");
 const { Buffer } = require("buffer");
 async function init(baseURI, mealsFilePath) {
@@ -49,6 +50,10 @@ class Meals {
   }
   getAllMeals() {
     return this._meals;
+  }
+
+  renderAsTable(mealPlanControl) {
+    return <MealsTable {...mealPlanControl} mealHandler={this} />;
   }
   modifyMeal(meal) {
     this._meals = this._meals.map((m) => {

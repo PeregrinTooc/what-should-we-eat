@@ -16,5 +16,5 @@ afterAll(async () => {
 });
 
 require("./AppIntegrationTests");
-require("./components/mealsTableComponentTests");
+require("../meals/mealsTableComponentTests");
 require("./components/mealPlannerComponentTests");
