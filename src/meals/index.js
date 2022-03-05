@@ -44,9 +44,17 @@ class MealPlan {
   }
 }
 
+class Meal {
+  constructor(meal) {
+    this.mealName = meal.mealName;
+    this.effort = meal.effort;
+    this.tags = [...meal.tags];
+    this.healthLevel = meal.healthLevel;
+  }
+}
 class Meals {
   constructor(meals) {
-    this._meals = meals;
+    this._meals = meals.map((m) => new Meal(m));
   }
   getAllMeals() {
     return this._meals;
