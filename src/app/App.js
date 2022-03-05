@@ -31,7 +31,7 @@ function App({ baseURI }) {
       setMealHandler(await init(baseURI, filePath));
     }
     fetchData();
-    const mealPlanController = require("../meals/index.js").getMealPlan();
+    const mealPlanController = require("../meals/index.js").createMealPlan();
     updateMealPlan(mealPlanController.getOverview());
     updateMealPlanController(mealPlanController);
   }, [baseURI]);

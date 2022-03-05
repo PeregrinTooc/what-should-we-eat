@@ -11,10 +11,10 @@ async function init(baseURI, mealsFilePath) {
   let encodedData = jsonArray.data.content;
   const buffer = Buffer.from(encodedData, "base64");
   const meals = buffer.toString();
-  return new MealsHandler(JSON.parse(meals).meals);
+  return new Meals(JSON.parse(meals).meals);
 }
 
-function getMealPlan() {
+function createMealPlan() {
   return new MealPlan();
 }
 
@@ -43,7 +43,7 @@ class MealPlan {
   }
 }
 
-class MealsHandler {
+class Meals {
   constructor(meals) {
     this._meals = meals;
   }
@@ -60,4 +60,4 @@ class MealsHandler {
   }
 }
 
-export { init, getMealPlan, MealsHandler };
+export { init, createMealPlan, Meals };

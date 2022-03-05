@@ -138,12 +138,12 @@ function renderEmptyTable() {
 }
 
 function renderTable(availableMeals) {
-  const MealsHandler = require("../../meals/index").MealsHandler;
+  const Meals = require("../../meals/index").Meals;
   render(
     <MealsTable
       mealPlanController={mealPlanController}
       updateMealPlan={() => {}}
-      mealHandler={new MealsHandler(availableMeals)}
+      mealHandler={new Meals(availableMeals)}
     />
   );
 }

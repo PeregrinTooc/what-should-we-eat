@@ -1,6 +1,6 @@
 import { cleanup } from "@testing-library/react";
 
-export const mealPlanController = require("../meals/index.js").getMealPlan();
+export const mealPlanController = require("../meals/index.js").createMealPlan();
 const testServer = require("../testServer");
 const port = 8002;
 export const baseURI = `http://localhost:${port}`;
