@@ -1,4 +1,4 @@
-import { init, createMealPlan } from "./index.js";
+import { init, createMealPlan, createMeals } from "./index.js";
 const testServer = require("../testServer.js");
 const filePath = "";
 const baseURI = "http://localhost:8000";
@@ -8,28 +8,19 @@ let meals;
 
 beforeEach(async () => {
   testServer.start();
-  mealsHandler = await init(baseURI, filePath);
+  await init(baseURI, filePath);
+
   mealPlan = createMealPlan();
-  meals = mealsHandler.getAllMeals();
+  meals = createMeals();
 });
 
 afterEach(async () => {
   await testServer.stop();
 });
 
-test("init should return an object with a method getAllMeals", () => {
-  expect(mealsHandler).toBeDefined();
-  expect(mealsHandler.getAllMeals).toBeDefined();
-});
-
-test("getAllMeals should return an array of meals", () => {
+test("after init, meals and mealPlan should be defined", () => {
   expect(meals).toBeDefined();
-  expect(meals[0]).toEqual({
-    mealName: "Ofengemüse mit Kartoffeln und Tzatziki",
-    effort: 3,
-    tags: ["Kartoffeln"],
-    healthLevel: 7,
-  });
+  expect(mealPlan).toBeDefined();
 });
 
 test("Meal Plans should have a function getMealFor", () => {
@@ -54,13 +45,14 @@ test("Meal Plans should have a function getOverview", () => {
   expect(mealPlan.getOverview()).toEqual(["S", "T", "U", "V", "W", "X", "Y"]);
 });
 
-test("meal handler should be able to update a meal", () => {
-  let meal = { ...meals[0] };
+test("meals should be able to update themselves", () => {
+  console.log(meals);
+  let meal = { ...meals._meals[0] };
+  console.log(meal);
   meal.effort = 4;
   meal.healthLevel = 8;
   meal.tags = ["Ofen", ...meal.tags];
-  mealsHandler.modifyMeal(meal);
-  meals = mealsHandler.getAllMeals();
-  expect(meals[0]).toEqual(meal);
-  expect(meals).toHaveLength(1);
+  meals.modifyMeal(meal);
+  expect(meals._meals[0]).toEqual(meal);
+  expect(meals._meals).toHaveLength(1);
 });
