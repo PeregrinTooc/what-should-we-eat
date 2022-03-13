@@ -1,8 +1,26 @@
-import { render } from '@testing-library/react';
-import { Meal } from './meal';
+import React, { useState, useEffect } from 'react'
+import "bulma/css/bulma.min.css";
+import { Form } from "react-bulma-components";
+import { createEmptyMeal, Meal } from './meal.tsx';
+
 export enum Days{
-  Monday
+  Monday,
+  Tuesday,
+  Wednesday,
+  Thursday,
+  Friday,
+  Saturday,
+  Sunday
 }
+
+const mon = { id: Days.Monday, displayName: 'Montag' };
+const tue = { id: Days.Tuesday, displayName: 'Dienstag' };
+const wed = { id: Days.Wednesday, displayName: 'Mittwoch' };
+const thu = { id: Days.Thursday, displayName: 'Donnerstag' };
+const fri = { id: Days.Friday, displayName: 'Freitag' };
+const sat = { id: Days.Saturday, displayName: 'Samstag' };
+const sun = { id: Days.Sunday, displayName: 'Sonntag' };
+
 export interface MealPlan{
     addMealFor(day: Days, meal: Meal)
     render(
@@ -15,7 +33,73 @@ export function createEmptyMealPlan(): MealPlan{
 }
 
 class MealPlanImpl implements MealPlan{
-  addMealFor(day: Days, meal: Meal) {
+  monMeal : Meal = createEmptyMeal();
+  tueMeal : Meal = createEmptyMeal();
+  wedMeal : Meal = createEmptyMeal();
+  thuMeal : Meal = createEmptyMeal();
+  friMeal : Meal = createEmptyMeal();
+  satMeal : Meal = createEmptyMeal();
+  sunMeal : Meal = createEmptyMeal();
+  updateState : Function = ()=>{};
+  stateCallback : Function = (updateState:Function)=>{
+    this.updateState = updateState
   }
-  render(){}
+
+  addMealFor(day: Days, meal: Meal) {
+    switch (day) {
+      case Days.Monday:
+        this.monMeal = meal;
+        break;
+      case Days.Tuesday:
+        this.tueMeal = meal;
+        break;
+      case Days.Wednesday:
+        this.wedMeal = meal;
+        break;
+      case Days.Thursday:
+        this.thuMeal = meal;
+        break;
+      case Days.Friday:
+        this.friMeal = meal;
+        break;
+      case Days.Saturday:
+        this.satMeal = meal;
+        break;
+      case Days.Sunday:
+        this.sunMeal = meal;
+        break;
+    }
+    this.updateState({...this})
+  }
+  render(
+  ){
+    return(
+       <MealPlanComponent {... this}/>
+    )
+  }
+  
+  }
+  
+  function MealPlanDayComonent({dayName, meal}) {
+      return (<Form.Field>
+        <Form.Label htmlFor={`dayNameForm-${dayName}`}>
+          {`Essen für ${dayName}`}{" "}
+        </Form.Label>
+        {meal? meal.render() : undefined}
+      </Form.Field>);
 }
+
+
+    function MealPlanComponent({monMeal, tueMeal, wedMeal, thuMeal, friMeal, satMeal, sunMeal, stateCallback}) {
+      const [state, setState] = useState({monMeal, tueMeal, wedMeal, thuMeal, friMeal, satMeal, sunMeal})
+      useEffect(() => {if(stateCallback){stateCallback(setState)}}, [stateCallback] );
+      return (<>
+       <MealPlanDayComonent dayName={mon.displayName} meal={state.monMeal} />
+       <MealPlanDayComonent dayName={tue.displayName} meal={state.tueMeal} />
+       <MealPlanDayComonent dayName={wed.displayName} meal={state.wedMeal} />
+       <MealPlanDayComonent dayName={thu.displayName} meal={state.thuMeal} />
+       <MealPlanDayComonent dayName={fri.displayName} meal={state.friMeal} />
+       <MealPlanDayComonent dayName={sat.displayName} meal={state.satMeal} />
+       <MealPlanDayComonent dayName={sun.displayName} meal={state.sunMeal} />
+       </>);
+    }
