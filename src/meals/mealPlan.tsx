@@ -39,7 +39,7 @@ class MealPlanImpl implements MealPlan {
   satMeal: Meal = createEmptyMeal();
   sunMeal: Meal = createEmptyMeal();
   updateState: Function = () => {};
-  stateCallback: Function = (updateState: Function) => {
+  registerObserver: Function = (updateState: Function) => {
     this.updateState = updateState;
   };
 
@@ -70,41 +70,13 @@ class MealPlanImpl implements MealPlan {
     this.updateState({ ...this });
   }
   render() {
-    return <MealPlanComponent {...this} />;
+    return <MealPlanComponent mealPlan={this} />;
   }
 }
 
-function MealPlanDayComonent({ dayName, meal }) {
-  return (
-    <Form.Field key={dayName}>
-      <Form.Label htmlFor={`dayNameForm-${dayName}`}>
-        {`Essen für ${dayName}`}{" "}
-      </Form.Label>
-      {meal ? meal.renderName() : undefined}
-    </Form.Field>
-  );
-}
-
-function MealPlanComponent({
-  monMeal,
-  tueMeal,
-  wedMeal,
-  thuMeal,
-  friMeal,
-  satMeal,
-  sunMeal,
-  stateCallback,
-}) {
-  const [state, setState] = useState({
-    monMeal,
-    tueMeal,
-    wedMeal,
-    thuMeal,
-    friMeal,
-    satMeal,
-    sunMeal,
-  });
-  stateCallback(setState);
+function MealPlanComponent({ mealPlan }) {
+  const [state, setState] = useState(mealPlan);
+  mealPlan.registerObserver(setState);
   return (
     <>
       <MealPlanDayComonent dayName={mon.displayName} meal={state.monMeal} />
@@ -116,4 +88,14 @@ function MealPlanComponent({
       <MealPlanDayComonent dayName={sun.displayName} meal={state.sunMeal} />
     </>
   );
+  function MealPlanDayComonent({ dayName, meal }) {
+    return (
+      <Form.Field key={dayName}>
+        <Form.Label htmlFor={`dayNameForm-${dayName}`}>
+          {`Essen für ${dayName}`}{" "}
+        </Form.Label>
+        {meal ? meal.renderName() : undefined}
+      </Form.Field>
+    );
+  }
 }

@@ -16,9 +16,10 @@ class RecipeBookImpl implements RecipeBook {
   render() {
     return (
       <div className="box" draggable>
-        {this.meals.map((meal) => {
-          return meal.renderAsListItem();
-        })}
+        {this.meals[0].renderAsListItemWithDetailsButton()}
+        {/* {this.meals.map((meal) => {
+          return meal.renderAsListItemWithDetailsButton();
+        })} */}
       </div>
     );
   }
