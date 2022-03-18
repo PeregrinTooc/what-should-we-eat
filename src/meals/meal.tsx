@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "bulma/css/bulma.min.css";
 import { Modal, Content, Media } from "react-bulma-components";
 export interface Meal {
   renderName(): any;
-  renderAsListItem(): any;
+  renderAsListItemWithDetailsButton(): any;
   renderDetails(): any;
   showDetailScreen(): void;
   closeDetailScreen(): void;
@@ -18,8 +18,11 @@ class MealImpl implements Meal {
   private showDetails: boolean;
   private _isEmpty: boolean;
   observer: Function = () => {};
-  registerObserver: Function = (observer) => {
+  subscribe: Function = (observer) => {
     this.observer = observer;
+  };
+  unsubscribe: Function = (observer) => {
+    this.observer = () => {};
   };
   constructor(properties) {
     this.mealName = properties.mealName ? properties.mealName : "";
@@ -73,7 +76,12 @@ function MealNameComponent({ meal }) {
 }
 function MealModal({ meal }) {
   const [state, setState] = useState(meal);
-  state.registerObserver(setState);
+  useEffect(() => {
+    state.subscribe(setState);
+    return () => {
+      state.unsubscribe();
+    };
+  }, [setState, state]);
   return (
     <>
       <Modal show={state.showDetails} onClose={state.closeDetailScreen}>

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "bulma/css/bulma.min.css";
-import { Box, Form } from "react-bulma-components";
+import { Box, Button, Form } from "react-bulma-components";
 import { createEmptyMeal, Meal } from "./meal.tsx";
 import { registerDragObserver } from "./recipeBook.tsx";
 
@@ -30,6 +30,7 @@ const sun = { id: Days.Sunday, displayName: "Sonntag" };
 export interface MealPlan {
   addMealFor(day: Days, meal: Meal);
   render();
+  removeMealFor(day: Days);
 }
 
 export function createEmptyMealPlan(): MealPlan {
@@ -46,10 +47,19 @@ class MealPlanImpl implements MealPlan {
   sunMeal: Meal = createEmptyMeal();
   updateState: Function = () => {};
   observers: Function[] = [];
-  registerObserver: Function = (updateState: Function) => {
-    this.observers.push(updateState);
+  subscribe: Function = (updateState: Function) => {
+    if (this.observers.indexOf(updateState) === -1) {
+      this.observers.push(updateState);
+    }
   };
-
+  unsubscribe: Function = (updateState: Function) => {
+    this.observers = this.observers.filter((f) => {
+      return f !== updateState;
+    });
+  };
+  removeMealFor = (day: Days) => {
+    this.addMealFor(day, createEmptyMeal());
+  };
   addMealFor(day: Days, meal: Meal) {
     switch (day) {
       case Days.Monday:
@@ -85,66 +95,59 @@ class MealPlanImpl implements MealPlan {
 
 function MealPlanComponent({ mealPlan }) {
   const [state, setState] = useState(mealPlan);
-  mealPlan.registerObserver(setState);
+  useEffect(() => {
+    mealPlan.subscribe(setState);
+    return () => {
+      mealPlan.unsubscribe(setState);
+    };
+  }, [mealPlan]);
   return (
     <>
-      <MealPlanDayComonent
-        dayName={mon.displayName}
-        meal={state.monMeal}
-        mealplan={this}
-      />
-      <MealPlanDayComonent
-        dayName={tue.displayName}
-        meal={state.tueMeal}
-        mealplan={this}
-      />
-      <MealPlanDayComonent
-        dayName={wed.displayName}
-        meal={state.wedMeal}
-        mealplan={this}
-      />
-      <MealPlanDayComonent
-        dayName={thu.displayName}
-        meal={state.thuMeal}
-        mealplan={this}
-      />
-      <MealPlanDayComonent
-        dayName={fri.displayName}
-        meal={state.friMeal}
-        mealplan={this}
-      />
-      <MealPlanDayComonent
-        dayName={sat.displayName}
-        meal={state.satMeal}
-        mealplan={this}
-      />
-      <MealPlanDayComonent
-        dayName={sun.displayName}
-        meal={state.sunMeal}
-        mealplan={this}
-      />
+      <MealPlanDayComonent day={mon} meal={state.monMeal} mealplan={this} />
+      <MealPlanDayComonent day={tue} meal={state.tueMeal} mealplan={this} />
+      <MealPlanDayComonent day={wed} meal={state.wedMeal} mealplan={this} />
+      <MealPlanDayComonent day={thu} meal={state.thuMeal} mealplan={this} />
+      <MealPlanDayComonent day={fri} meal={state.friMeal} mealplan={this} />
+      <MealPlanDayComonent day={sat} meal={state.satMeal} mealplan={this} />
+      <MealPlanDayComonent day={sun} meal={state.sunMeal} mealplan={this} />
     </>
   );
-  function MealPlanDayComonent({ dayName, meal, mealplan }) {
+  function MealPlanDayComonent({ day, meal, mealplan }) {
     const [plan, setMealPlan] = useState(mealPlan);
-    mealPlan.registerObserver(setMealPlan);
+    useEffect(() => {
+      mealPlan.subscribe(setMealPlan);
+      return () => {
+        mealPlan.unsubscribe(setMealPlan);
+      };
+    }, []);
     return (
-      <Form.Field key={dayName}>
-        <Form.Label htmlFor={`dayNameForm-${dayName}`}>
-          {`Essen für ${dayName}`}{" "}
+      <Form.Field key={day.id}>
+        <Form.Label htmlFor={`dayNameForm-${day.id}`}>
+          {`Essen für ${day.displayName}`}{" "}
         </Form.Label>
         {meal.isEmpty() ? (
           <Box
             onDragOver={(e) => e.preventDefault()}
             onDrop={(e) => {
               console.log(e);
-              plan.addMealFor(Days.Tuesday, draggedMeal);
+              plan.addMealFor(day.id, draggedMeal);
             }}
           >
             Gericht hierhin ziehen
           </Box>
         ) : (
-          meal.renderName()
+          <Box>
+            <div className="media">
+              {meal.renderName()}
+              <Button
+                aria-label="delete"
+                remove={true}
+                onClick={() => {
+                  plan.removeMealFor(day.id);
+                }}
+              ></Button>
+            </div>
+          </Box>
         )}
       </Form.Field>
     );
