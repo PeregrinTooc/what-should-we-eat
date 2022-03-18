@@ -7,15 +7,7 @@ export interface Meal {
   renderDetails(): any;
   showDetailScreen(): void;
   closeDetailScreen(): void;
-}
-
-export function createMealFromJSON(meal: string): Meal {
-  const mealProps = JSON.parse(meal);
-  return new MealImpl({ ...mealProps });
-}
-
-export function createEmptyMeal(): Meal {
-  return new MealImpl({});
+  isEmpty(): boolean;
 }
 
 class MealImpl implements Meal {
@@ -24,6 +16,7 @@ class MealImpl implements Meal {
   private tags: string[] | any;
   private healthLevel: number;
   private showDetails: boolean;
+  private _isEmpty: boolean;
   observer: Function = () => {};
   registerObserver: Function = (observer) => {
     this.observer = observer;
@@ -47,7 +40,7 @@ class MealImpl implements Meal {
     );
   }
   renderDetails() {
-    return <MealModal meal={this}></MealModal>;
+    return <MealModal key={`${this.mealName}-details`} meal={this}></MealModal>;
   }
   showDetailScreen = () => {
     this.showDetails = true;
@@ -59,6 +52,20 @@ class MealImpl implements Meal {
     this.showDetails = false;
     this.observer({ ...this });
   };
+  isEmpty = () => {
+    return this.mealName === "";
+  };
+}
+
+const emptyMeal = new MealImpl({});
+
+export function createMealFromJSON(meal: string): Meal {
+  const mealProps = JSON.parse(meal);
+  return new MealImpl({ ...mealProps });
+}
+
+export function createEmptyMeal(): Meal {
+  return emptyMeal;
 }
 
 function MealNameComponent({ meal }) {
@@ -77,14 +84,7 @@ function MealModal({ meal }) {
           <Modal.Card.Body>
             <Media>
               <Media.Item>
-                <Content>
-                  <p>
-                    <strong>John Smith</strong> <small>@johnsmith</small>{" "}
-                    <small>31m</small>
-                    <br />
-                    Some Content
-                  </p>
-                </Content>
+                <Content></Content>
               </Media.Item>
             </Media>
           </Modal.Card.Body>

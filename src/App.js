@@ -16,7 +16,9 @@ function App() {
       healthLevel: 7,
     })
   );
-  const recipeBook = createRecipeBookFromJson(JSON.stringify([mondayMeal]));
+  const recipeBook = createRecipeBookFromJson(
+    JSON.stringify([mondayMeal, { mealName: "Foo" }])
+  );
   mealPlan.addMealFor(0, mondayMeal);
   return (
     <Container>

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import "bulma/css/bulma.min.css";
-import { Form } from "react-bulma-components";
+import { Box, Form } from "react-bulma-components";
 import { createEmptyMeal, Meal } from "./meal.tsx";
+import { registerDragObserver } from "./recipeBook.tsx";
 
 export enum Days {
   Monday,
@@ -12,6 +13,11 @@ export enum Days {
   Saturday,
   Sunday,
 }
+
+let draggedMeal;
+registerDragObserver((meal) => {
+  draggedMeal = meal;
+});
 
 const mon = { id: Days.Monday, displayName: "Montag" };
 const tue = { id: Days.Tuesday, displayName: "Dienstag" };
@@ -39,8 +45,9 @@ class MealPlanImpl implements MealPlan {
   satMeal: Meal = createEmptyMeal();
   sunMeal: Meal = createEmptyMeal();
   updateState: Function = () => {};
+  observers: Function[] = [];
   registerObserver: Function = (updateState: Function) => {
-    this.updateState = updateState;
+    this.observers.push(updateState);
   };
 
   addMealFor(day: Days, meal: Meal) {
@@ -67,7 +74,9 @@ class MealPlanImpl implements MealPlan {
         this.sunMeal = meal;
         break;
     }
-    this.updateState({ ...this });
+    this.observers.forEach((updateState) => {
+      updateState({ ...this });
+    });
   }
   render() {
     return <MealPlanComponent mealPlan={this} />;
@@ -79,22 +88,64 @@ function MealPlanComponent({ mealPlan }) {
   mealPlan.registerObserver(setState);
   return (
     <>
-      <MealPlanDayComonent dayName={mon.displayName} meal={state.monMeal} />
-      <MealPlanDayComonent dayName={tue.displayName} meal={state.tueMeal} />
-      <MealPlanDayComonent dayName={wed.displayName} meal={state.wedMeal} />
-      <MealPlanDayComonent dayName={thu.displayName} meal={state.thuMeal} />
-      <MealPlanDayComonent dayName={fri.displayName} meal={state.friMeal} />
-      <MealPlanDayComonent dayName={sat.displayName} meal={state.satMeal} />
-      <MealPlanDayComonent dayName={sun.displayName} meal={state.sunMeal} />
+      <MealPlanDayComonent
+        dayName={mon.displayName}
+        meal={state.monMeal}
+        mealplan={this}
+      />
+      <MealPlanDayComonent
+        dayName={tue.displayName}
+        meal={state.tueMeal}
+        mealplan={this}
+      />
+      <MealPlanDayComonent
+        dayName={wed.displayName}
+        meal={state.wedMeal}
+        mealplan={this}
+      />
+      <MealPlanDayComonent
+        dayName={thu.displayName}
+        meal={state.thuMeal}
+        mealplan={this}
+      />
+      <MealPlanDayComonent
+        dayName={fri.displayName}
+        meal={state.friMeal}
+        mealplan={this}
+      />
+      <MealPlanDayComonent
+        dayName={sat.displayName}
+        meal={state.satMeal}
+        mealplan={this}
+      />
+      <MealPlanDayComonent
+        dayName={sun.displayName}
+        meal={state.sunMeal}
+        mealplan={this}
+      />
     </>
   );
-  function MealPlanDayComonent({ dayName, meal }) {
+  function MealPlanDayComonent({ dayName, meal, mealplan }) {
+    const [plan, setMealPlan] = useState(mealPlan);
+    mealPlan.registerObserver(setMealPlan);
     return (
       <Form.Field key={dayName}>
         <Form.Label htmlFor={`dayNameForm-${dayName}`}>
           {`Essen für ${dayName}`}{" "}
         </Form.Label>
-        {meal ? meal.renderName() : undefined}
+        {meal.isEmpty() ? (
+          <Box
+            onDragOver={(e) => e.preventDefault()}
+            onDrop={(e) => {
+              console.log(e);
+              plan.addMealFor(Days.Tuesday, draggedMeal);
+            }}
+          >
+            Gericht hierhin ziehen
+          </Box>
+        ) : (
+          meal.renderName()
+        )}
       </Form.Field>
     );
   }
