@@ -97,7 +97,7 @@ function MealPlanComponent({ mealPlan }) {
   const [state, setState] = useState(mealPlan);
   useEffect(() => {
     mealPlan.subscribe(setState);
-    return () => {
+    return function cleanup() {
       mealPlan.unsubscribe(setState);
     };
   }, [mealPlan]);
@@ -116,7 +116,7 @@ function MealPlanComponent({ mealPlan }) {
     const [plan, setMealPlan] = useState(mealPlan);
     useEffect(() => {
       mealPlan.subscribe(setMealPlan);
-      return () => {
+      return function cleanup() {
         mealPlan.unsubscribe(setMealPlan);
       };
     }, []);
@@ -129,7 +129,6 @@ function MealPlanComponent({ mealPlan }) {
           <Box
             onDragOver={(e) => e.preventDefault()}
             onDrop={(e) => {
-              console.log(e);
               plan.addMealFor(day.id, draggedMeal);
             }}
           >
@@ -138,14 +137,16 @@ function MealPlanComponent({ mealPlan }) {
         ) : (
           <Box>
             <div className="media">
-              {meal.renderName()}
-              <Button
-                aria-label="delete"
-                remove={true}
-                onClick={() => {
-                  plan.removeMealFor(day.id);
-                }}
-              ></Button>
+              <div className="media-content">{meal.renderName()}</div>
+              <div className="media-right">
+                <Button
+                  aria-label="delete"
+                  remove={true}
+                  onClick={() => {
+                    plan.removeMealFor(day.id);
+                  }}
+                ></Button>
+              </div>
             </div>
           </Box>
         )}

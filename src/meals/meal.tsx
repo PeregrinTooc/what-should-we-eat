@@ -78,7 +78,7 @@ function MealModal({ meal }) {
   const [state, setState] = useState(meal);
   useEffect(() => {
     state.subscribe(setState);
-    return () => {
+    return function cleanup() {
       state.unsubscribe();
     };
   }, [setState, state]);
@@ -104,16 +104,20 @@ function MealModal({ meal }) {
 
 function MealListItemComponent({ meal }) {
   return (
-    <>
-      <MealNameComponent meal={meal}></MealNameComponent>
-      <button
-        className="button"
-        onClick={() => {
-          meal.showDetailScreen();
-        }}
-      >
-        Details
-      </button>
-    </>
+    <div className="media">
+      <div className="media-content">
+        <MealNameComponent meal={meal}></MealNameComponent>
+      </div>
+      <div className="media-right">
+        <button
+          className="button"
+          onClick={() => {
+            meal.showDetailScreen();
+          }}
+        >
+          Details
+        </button>
+      </div>
+    </div>
   );
 }
