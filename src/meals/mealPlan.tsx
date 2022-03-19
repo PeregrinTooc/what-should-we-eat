@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "bulma/css/bulma.min.css";
 import { Box, Button, Form } from "react-bulma-components";
 import { createEmptyMeal, Meal } from "./meal.tsx";
 import { registerDragObserver } from "./recipeBook.tsx";
+import { useSubscriber, Publisher, defaultPublisher } from "./useSubscriber.ts";
 
 export enum Days {
   Monday,
@@ -28,16 +29,16 @@ const sat = { id: Days.Saturday, displayName: "Samstag" };
 const sun = { id: Days.Sunday, displayName: "Sonntag" };
 
 export interface MealPlan {
-  addMealFor(day: Days, meal: Meal);
-  render();
-  removeMealFor(day: Days);
+  addMealFor(day: Days, meal: Meal): void;
+  render(): JSX.Element;
+  removeMealFor(day: Days): void;
 }
 
 export function createEmptyMealPlan(): MealPlan {
   return new MealPlanImpl();
 }
 
-class MealPlanImpl implements MealPlan {
+class MealPlanImpl implements MealPlan, Publisher {
   monMeal: Meal = createEmptyMeal();
   tueMeal: Meal = createEmptyMeal();
   wedMeal: Meal = createEmptyMeal();
@@ -45,18 +46,12 @@ class MealPlanImpl implements MealPlan {
   friMeal: Meal = createEmptyMeal();
   satMeal: Meal = createEmptyMeal();
   sunMeal: Meal = createEmptyMeal();
-  updateState: Function = () => {};
+
   observers: Function[] = [];
-  subscribe: Function = (updateState: Function) => {
-    if (this.observers.indexOf(updateState) === -1) {
-      this.observers.push(updateState);
-    }
-  };
-  unsubscribe: Function = (updateState: Function) => {
-    this.observers = this.observers.filter((f) => {
-      return f !== updateState;
-    });
-  };
+  subscribe = defaultPublisher.subscribe.bind(this);
+  unsubscribe = defaultPublisher.unsubscribe.bind(this);
+  publish = defaultPublisher.publish.bind(this);
+
   removeMealFor = (day: Days) => {
     this.addMealFor(day, createEmptyMeal());
   };
@@ -84,9 +79,7 @@ class MealPlanImpl implements MealPlan {
         this.sunMeal = meal;
         break;
     }
-    this.observers.forEach((updateState) => {
-      updateState({ ...this });
-    });
+    this.publish();
   }
   render() {
     return <MealPlanComponent mealPlan={this} />;
@@ -94,32 +87,79 @@ class MealPlanImpl implements MealPlan {
 }
 
 function MealPlanComponent({ mealPlan }) {
-  const [state, setState] = useState(mealPlan);
-  useEffect(() => {
-    mealPlan.subscribe(setState);
-    return function cleanup() {
-      mealPlan.unsubscribe(setState);
-    };
-  }, [mealPlan]);
+  const [state, setState] = useState({
+    monMeal: mealPlan.monMeal,
+    tueMeal: mealPlan.tueMeal,
+    wedMeal: mealPlan.wedMeal,
+    thuMeal: mealPlan.thuMeal,
+    friMeal: mealPlan.friMeal,
+    satMeal: mealPlan.satMeal,
+    sunMeal: mealPlan.sunMeal,
+  });
+  const observer = (o) => {
+    if (
+      o.monMeal !== state.monMeal ||
+      o.tueMeal !== state.tueMeal ||
+      o.wedMeal !== state.wedMeal ||
+      o.thuMeal !== state.thuMeal ||
+      o.friMeal !== state.friMeal ||
+      o.satMeal !== state.satMeal ||
+      o.sunMeal !== state.sunMeal
+    ) {
+      setState({
+        monMeal: o.monMeal,
+        tueMeal: o.tueMeal,
+        wedMeal: o.wedMeal,
+        thuMeal: o.thuMeal,
+        friMeal: o.friMeal,
+        satMeal: o.satMeal,
+        sunMeal: o.sunMeal,
+      });
+    }
+  };
+
+  useSubscriber(mealPlan, observer);
+
   return (
     <>
-      <MealPlanDayComonent day={mon} meal={state.monMeal} mealplan={this} />
-      <MealPlanDayComonent day={tue} meal={state.tueMeal} mealplan={this} />
-      <MealPlanDayComonent day={wed} meal={state.wedMeal} mealplan={this} />
-      <MealPlanDayComonent day={thu} meal={state.thuMeal} mealplan={this} />
-      <MealPlanDayComonent day={fri} meal={state.friMeal} mealplan={this} />
-      <MealPlanDayComonent day={sat} meal={state.satMeal} mealplan={this} />
-      <MealPlanDayComonent day={sun} meal={state.sunMeal} mealplan={this} />
+      <MealPlanDayComponent
+        day={mon}
+        meal={state.monMeal}
+        mealPlan={mealPlan}
+      />
+      <MealPlanDayComponent
+        day={tue}
+        meal={state.tueMeal}
+        mealPlan={mealPlan}
+      />
+      <MealPlanDayComponent
+        day={wed}
+        meal={state.wedMeal}
+        mealPlan={mealPlan}
+      />
+      <MealPlanDayComponent
+        day={thu}
+        meal={state.thuMeal}
+        mealPlan={mealPlan}
+      />
+      <MealPlanDayComponent
+        day={fri}
+        meal={state.friMeal}
+        mealPlan={mealPlan}
+      />
+      <MealPlanDayComponent
+        day={sat}
+        meal={state.satMeal}
+        mealPlan={mealPlan}
+      />
+      <MealPlanDayComponent
+        day={sun}
+        meal={state.sunMeal}
+        mealPlan={mealPlan}
+      />
     </>
   );
-  function MealPlanDayComonent({ day, meal, mealplan }) {
-    const [plan, setMealPlan] = useState(mealPlan);
-    useEffect(() => {
-      mealPlan.subscribe(setMealPlan);
-      return function cleanup() {
-        mealPlan.unsubscribe(setMealPlan);
-      };
-    }, []);
+  function MealPlanDayComponent({ day, meal, mealPlan }) {
     return (
       <Form.Field key={day.id}>
         <Form.Label htmlFor={`dayNameForm-${day.id}`}>
@@ -129,7 +169,7 @@ function MealPlanComponent({ mealPlan }) {
           <Box
             onDragOver={(e) => e.preventDefault()}
             onDrop={(e) => {
-              plan.addMealFor(day.id, draggedMeal);
+              mealPlan.addMealFor(day.id, draggedMeal);
             }}
           >
             Gericht hierhin ziehen
@@ -143,7 +183,7 @@ function MealPlanComponent({ mealPlan }) {
                   aria-label="delete"
                   remove={true}
                   onClick={() => {
-                    plan.removeMealFor(day.id);
+                    mealPlan.removeMealFor(day.id);
                   }}
                 ></Button>
               </div>
