@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "bulma/css/bulma.min.css";
-import { Modal, Content, Media } from "react-bulma-components";
+import { Modal } from "react-bulma-components";
 export interface Meal {
   renderName(): any;
   renderAsListItemWithDetailsButton(): any;
@@ -90,11 +90,26 @@ function MealModal({ meal }) {
             <Modal.Card.Title>{state.mealName}</Modal.Card.Title>
           </Modal.Card.Header>
           <Modal.Card.Body>
-            <Media>
-              <Media.Item>
-                <Content></Content>
-              </Media.Item>
-            </Media>
+            <div className="media">
+              <div className="media-left">
+                <div className="content">
+                  <p>Aufwand: {state.effort}/10</p>
+                  <p>Gesundheitslevel: {state.healthLevel}/10</p>
+                </div>
+              </div>
+              <div className="media-content"></div>
+              <div className="media-right">
+                <div className="tags are-medium">
+                  {state.tags.map((tag) => {
+                    return (
+                      <div className="tag" key={tag}>
+                        {tag}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
           </Modal.Card.Body>
         </Modal.Card>
       </Modal>
