@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "bulma/css/bulma.min.css";
 import { Modal } from "react-bulma-components";
+import { useSubscriber, Publisher, defaultPublisher } from "./useSubscriber.ts";
 export interface Meal {
   renderName(): any;
   renderAsListItemWithDetailsButton(): any;
@@ -10,20 +11,17 @@ export interface Meal {
   isEmpty(): boolean;
 }
 
-class MealImpl implements Meal {
+class MealImpl implements Meal, Publisher {
   private mealName: string;
   private effort: number;
   private tags: string[] | any;
   private healthLevel: number;
   private showDetails: boolean;
   private _isEmpty: boolean;
-  observer: Function = () => {};
-  subscribe: Function = (observer) => {
-    this.observer = observer;
-  };
-  unsubscribe: Function = (observer) => {
-    this.observer = () => {};
-  };
+  observers: Function[] = [];
+  subscribe = defaultPublisher.subscribe.bind(this);
+  unsubscribe = defaultPublisher.unsubscribe.bind(this);
+  publish = defaultPublisher.publish.bind(this);
   constructor(properties) {
     this.mealName = properties.mealName ? properties.mealName : "";
     this.effort = properties.effort ? properties.effort : "";
@@ -47,13 +45,13 @@ class MealImpl implements Meal {
   }
   showDetailScreen = () => {
     this.showDetails = true;
-    this.observer({ ...this });
+    this.publish();
   };
   // use the inline function syntax so the methods are copied by the spread operator
   // and the method can be passed as a handler
   closeDetailScreen = () => {
     this.showDetails = false;
-    this.observer({ ...this });
+    this.publish();
   };
   isEmpty = () => {
     return this.mealName === "";
@@ -75,13 +73,13 @@ function MealNameComponent({ meal }) {
   return <p>{meal.mealName}</p>;
 }
 function MealModal({ meal }) {
-  const [state, setState] = useState(meal);
-  useEffect(() => {
-    state.subscribe(setState);
-    return function cleanup() {
-      state.unsubscribe();
-    };
-  }, [setState, state]);
+  const [state, setState] = useState({ ...meal });
+  const observer = (o) => {
+    if (o.showDetails !== state.showDetails) {
+      setState({ ...o })
+    }
+  }
+  useSubscriber(meal, observer)
   return (
     <>
       <Modal show={state.showDetails} onClose={state.closeDetailScreen}>
