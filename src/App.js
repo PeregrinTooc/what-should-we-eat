@@ -1,9 +1,9 @@
 import React from "react";
 import "bulma/css/bulma.min.css";
-import { Columns, Container, Heading } from "react-bulma-components";
 import { createEmptyMealPlan } from "./meals/mealPlan.tsx";
 import { createMealFromJSON } from "./meals/meal.tsx";
 import { createRecipeBookFromJson } from "./meals/recipeBook.tsx";
+import { createDesk } from "./desk.tsx";
 
 function App() {
   const mealPlan = createEmptyMealPlan();
@@ -23,14 +23,9 @@ function App() {
     ])
   );
   mealPlan.addMealFor(0, mondayMeal);
+  const desk = createDesk(mealPlan, recipeBook)
   return (
-    <Container>
-      <Heading>Was wollen wir essen?</Heading>
-      <Columns centered={true}>
-        <Columns.Column>{mealPlan.render()}</Columns.Column>
-        <Columns.Column>{recipeBook.render()}</Columns.Column>
-      </Columns>
-    </Container>
+    <>{desk.render()}</>
   );
 }
 

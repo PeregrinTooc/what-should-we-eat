@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "bulma/css/bulma.min.css";
 import { Box, Button, Form } from "react-bulma-components";
 import { createEmptyMeal, Meal } from "./meal.tsx";
-import { registerDragObserver } from "./recipeBook.tsx";
+import { chef } from "./../chef.ts"
 import { useSubscriber, Publisher, defaultPublisher } from "./useSubscriber.ts";
 
 export enum Days {
@@ -15,10 +15,7 @@ export enum Days {
   Sunday,
 }
 
-let draggedMeal;
-registerDragObserver((meal) => {
-  draggedMeal = meal;
-});
+
 
 const mon = { id: Days.Monday, displayName: "Montag" };
 const tue = { id: Days.Tuesday, displayName: "Dienstag" };
@@ -88,13 +85,7 @@ class MealPlanImpl implements MealPlan, Publisher {
 
 function MealPlanComponent({ mealPlan }) {
   const [state, setState] = useState({
-    monMeal: mealPlan.monMeal,
-    tueMeal: mealPlan.tueMeal,
-    wedMeal: mealPlan.wedMeal,
-    thuMeal: mealPlan.thuMeal,
-    friMeal: mealPlan.friMeal,
-    satMeal: mealPlan.satMeal,
-    sunMeal: mealPlan.sunMeal,
+    ...mealPlan
   });
   const observer = (o) => {
     if (
@@ -106,15 +97,7 @@ function MealPlanComponent({ mealPlan }) {
       o.satMeal !== state.satMeal ||
       o.sunMeal !== state.sunMeal
     ) {
-      setState({
-        monMeal: o.monMeal,
-        tueMeal: o.tueMeal,
-        wedMeal: o.wedMeal,
-        thuMeal: o.thuMeal,
-        friMeal: o.friMeal,
-        satMeal: o.satMeal,
-        sunMeal: o.sunMeal,
-      });
+      setState({ ...o })
     }
   };
 
@@ -168,8 +151,8 @@ function MealPlanComponent({ mealPlan }) {
         {meal.isEmpty() ? (
           <Box
             onDragOver={(e) => e.preventDefault()}
-            onDrop={(e) => {
-              mealPlan.addMealFor(day.id, draggedMeal);
+            onDrop={() => {
+              mealPlan.addMealFor(day.id, chef.getPickedMeal());
             }}
           >
             Gericht hierhin ziehen
