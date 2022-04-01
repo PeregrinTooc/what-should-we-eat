@@ -6,7 +6,7 @@ export interface RecipeBook {
 }
 
 export function createRecipeBookFromJson(mealsJSON: string): RecipeBook {
-  return new RecipeBookImpl(JSON.parse(mealsJSON));
+  return new RecipeBookImpl(JSON.parse(mealsJSON).meals);
 }
 
 class RecipeBookImpl implements RecipeBook {
