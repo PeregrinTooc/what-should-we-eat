@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "bulma/css/bulma.min.css";
 import { Box, Button, Form } from "react-bulma-components";
 import { createEmptyMeal, Meal } from "./meal.tsx";
-import { chef } from "./../chef.ts"
+import chef from "./../chef.ts";
 import { useSubscriber, Publisher, defaultPublisher } from "./useSubscriber.ts";
 
 export enum Days {
@@ -14,8 +14,6 @@ export enum Days {
   Saturday,
   Sunday,
 }
-
-
 
 const mon = { id: Days.Monday, displayName: "Montag" };
 const tue = { id: Days.Tuesday, displayName: "Dienstag" };
@@ -85,7 +83,7 @@ class MealPlanImpl implements MealPlan, Publisher {
 
 function MealPlanComponent({ mealPlan }) {
   const [state, setState] = useState({
-    ...mealPlan
+    ...mealPlan,
   });
   const observer = (o) => {
     if (
@@ -97,7 +95,7 @@ function MealPlanComponent({ mealPlan }) {
       o.satMeal !== state.satMeal ||
       o.sunMeal !== state.sunMeal
     ) {
-      setState({ ...o })
+      setState({ ...o });
     }
   };
 

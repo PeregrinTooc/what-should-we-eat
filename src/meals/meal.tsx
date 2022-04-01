@@ -43,12 +43,13 @@ class MealImpl implements Meal, Publisher {
   renderDetails() {
     return <MealModal key={`${this.mealName}-details`} meal={this}></MealModal>;
   }
+  // use the inline function syntax so the methods are copied by the spread operator
+  // and the method can be passed as a handler
   showDetailScreen = () => {
     this.showDetails = true;
     this.publish();
   };
-  // use the inline function syntax so the methods are copied by the spread operator
-  // and the method can be passed as a handler
+
   closeDetailScreen = () => {
     this.showDetails = false;
     this.publish();
@@ -76,10 +77,10 @@ function MealModal({ meal }) {
   const [state, setState] = useState({ ...meal });
   const observer = (o) => {
     if (o.showDetails !== state.showDetails) {
-      setState({ ...o })
+      setState({ ...o });
     }
-  }
-  useSubscriber(meal, observer)
+  };
+  useSubscriber(meal, observer);
   return (
     <>
       <Modal show={state.showDetails} onClose={state.closeDetailScreen}>
@@ -88,26 +89,7 @@ function MealModal({ meal }) {
             <Modal.Card.Title>{state.mealName}</Modal.Card.Title>
           </Modal.Card.Header>
           <Modal.Card.Body>
-            <div className="media">
-              <div className="media-left">
-                <div className="content">
-                  <p>Aufwand: {state.effort}/10</p>
-                  <p>Gesundheitslevel: {state.healthLevel}/10</p>
-                </div>
-              </div>
-              <div className="media-content"></div>
-              <div className="media-right">
-                <div className="tags are-medium">
-                  {state.tags.map((tag) => {
-                    return (
-                      <div className="tag" key={tag}>
-                        {tag}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
+            <MealDetails state={state} />
           </Modal.Card.Body>
         </Modal.Card>
       </Modal>
@@ -130,6 +112,31 @@ function MealListItemComponent({ meal }) {
         >
           Details
         </button>
+      </div>
+    </div>
+  );
+}
+
+function MealDetails({ state }) {
+  return (
+    <div className="media">
+      <div className="media-left">
+        <div className="content">
+          <p>Aufwand: {state.effort}/10</p>
+          <p>Gesundheitslevel: {state.healthLevel}/10</p>
+        </div>
+      </div>
+      <div className="media-content"></div>
+      <div className="media-right">
+        <div className="tags are-medium">
+          {state.tags.map((tag) => {
+            return (
+              <div className="tag" key={tag}>
+                {tag}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

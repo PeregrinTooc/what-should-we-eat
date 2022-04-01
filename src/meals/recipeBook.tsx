@@ -1,5 +1,5 @@
 import { Meal, createMealFromJSON } from "./meal.tsx";
-import { chef } from "./../chef.ts"
+import chef from "./../chef.ts";
 
 export interface RecipeBook {
   render();
@@ -8,7 +8,6 @@ export interface RecipeBook {
 export function createRecipeBookFromJson(mealsJSON: string): RecipeBook {
   return new RecipeBookImpl(JSON.parse(mealsJSON));
 }
-
 
 class RecipeBookImpl implements RecipeBook {
   private meals: Meal[];
