@@ -20,20 +20,14 @@ class RecipeBookImpl implements RecipeBook {
     return (
       <>
         {this.meals.map((meal, i) => {
-          return (
-            <RecipeBookEntry
-              key={i}
-              meal={meal}
-              recipebook={this}
-            ></RecipeBookEntry>
-          );
+          return <RecipeBookEntry key={i} meal={meal}></RecipeBookEntry>;
         })}
       </>
     );
   }
 }
 
-function RecipeBookEntry({ meal, recipebook }) {
+function RecipeBookEntry({ meal }) {
   return (
     <>
       <div

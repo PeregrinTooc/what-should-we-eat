@@ -35,9 +35,11 @@ function Desk({ mealPlan, recipeBook }) {
     <Container>
       <Heading>Was wollen wir essen?</Heading>
       <Columns centered={true}>
-        <Columns.Column size={"half"}>
+        <Columns.Column>
           <div ref={printRef}>{mealPlan.render()}</div>
-          <Button onClick={handleDownloadImage}>Als Bild Speichern</Button>
+          <div className="pt-4">
+            <Button onClick={handleDownloadImage}>Als Bild Speichern</Button>
+          </div>
         </Columns.Column>
         <Columns.Column>{recipeBook.render()}</Columns.Column>
       </Columns>
