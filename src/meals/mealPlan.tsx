@@ -4,24 +4,7 @@ import { Box, Button, Form } from "react-bulma-components";
 import { createEmptyMeal, Meal } from "./meal.tsx";
 import chef from "./../chef.ts";
 import { useSubscriber, Publisher, defaultPublisher } from "./useSubscriber.ts";
-
-export enum Days {
-  Monday,
-  Tuesday,
-  Wednesday,
-  Thursday,
-  Friday,
-  Saturday,
-  Sunday,
-}
-
-const mon = { id: Days.Monday, displayName: "Montag" };
-const tue = { id: Days.Tuesday, displayName: "Dienstag" };
-const wed = { id: Days.Wednesday, displayName: "Mittwoch" };
-const thu = { id: Days.Thursday, displayName: "Donnerstag" };
-const fri = { id: Days.Friday, displayName: "Freitag" };
-const sat = { id: Days.Saturday, displayName: "Samstag" };
-const sun = { id: Days.Sunday, displayName: "Sonntag" };
+import Days, { mon, tue, wed, thu, fri, sat, sun } from "./Days.ts";
 
 export interface MealPlan {
   addMealFor(day: Days, meal: Meal): void;
