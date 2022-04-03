@@ -16,11 +16,9 @@ async function getRecipeBook(): RecipeBook {
         const rpc = axios.create({
             baseURL: "https://api.github.com/repos/PeregrinTooc/what-should-we-eat/contents",
         });
-        const jsonArray = await rpc.get("/src/meals/resources/meals.json");
-        let encodedData = jsonArray.data.content;
-        const buffer = Buffer.from(encodedData, "base64");
-        const meals = buffer.toString();
-        return meals
+        const responseInGitHubFormat = await rpc.get("/src/meals/resources/meals.json");
+        let base64FormatEncodedMealsData = responseInGitHubFormat.data.content;
+        return Buffer.from(base64FormatEncodedMealsData, "base64").toString();
     }
     return createRecipeBookFromJson(await init())
 }

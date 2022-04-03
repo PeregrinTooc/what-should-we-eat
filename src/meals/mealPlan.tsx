@@ -4,7 +4,7 @@ import { Box, Button, Form } from "react-bulma-components";
 import { createEmptyMeal, Meal } from "./meal.tsx";
 import chef from "./../chef.ts";
 import { useSubscriber, Publisher, defaultPublisher } from "./useSubscriber.ts";
-import Days, { mon, tue, wed, thu, fri, sat, sun } from "./Days.ts";
+import Days, { mon, tue, wed, thu, fri, sat, sun } from "./days.ts";
 
 export interface MealPlan {
   addMealFor(day: Days, meal: Meal): void;

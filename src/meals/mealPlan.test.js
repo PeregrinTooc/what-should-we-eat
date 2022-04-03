@@ -1,5 +1,5 @@
 import { createEmptyMealPlan } from "./mealPlan";
-import Days from "./Days.ts";
+import Days from "./days.ts";
 import { render, screen, act, cleanup } from "@testing-library/react";
 import { mondayMealName, mondayMeal } from "./resources/testMeals";
 import userEvent from "@testing-library/user-event";

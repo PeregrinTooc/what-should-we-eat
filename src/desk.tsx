@@ -3,7 +3,7 @@ import { RecipeBook } from "./meals/recipeBook.tsx";
 import { Button, Columns, Container, Heading } from "react-bulma-components";
 import html2canvas from "html2canvas";
 import { useRef } from "react";
-export function createDesk(mealPlan: MealPlan, recipeBook: RecipeBook) {
+function createDesk(mealPlan: MealPlan, recipeBook: RecipeBook) {
   return {
     render: () => {
       return <Desk mealPlan={mealPlan} recipeBook={recipeBook} />;
@@ -46,3 +46,5 @@ function Desk({ mealPlan, recipeBook }) {
     </Container>
   );
 }
+
+export default createDesk;
