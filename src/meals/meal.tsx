@@ -66,6 +66,10 @@ export function createMealFromJSON(meal: string): Meal {
   return new MealImpl({ ...mealProps });
 }
 
+export function createMealWithProperties(mealProps: Object): Meal {
+  return new MealImpl({ ...mealProps });
+}
+
 export function createEmptyMeal(): Meal {
   return emptyMeal;
 }
