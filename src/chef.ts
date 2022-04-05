@@ -23,10 +23,6 @@ async function getRecipeBook(): RecipeBook {
     return createRecipeBookFromJson(await init())
 }
 
-function getPickedMeal(): Meal {
-    return pickedMeal
-}
-
 function pickMeal(meal: Meal) {
     pickedMeal = meal
 }
@@ -35,5 +31,14 @@ function getMealPlan(): MealPlan {
     return createEmptyMealPlan()
 }
 
-const chef = { pickMeal: pickMeal, getPickedMeal: getPickedMeal, getMealPlan: getMealPlan, getRecipeBook: getRecipeBook }
+function addPickedMealForDayToMealPlan(dayId, mealPlan): void {
+    mealPlan.addMealFor(dayId, pickedMeal);
+}
+
+const chef = {
+    pickMeal: pickMeal,
+    getMealPlan: getMealPlan,
+    getRecipeBook: getRecipeBook,
+    addPickedMealForDayToMealPlan: addPickedMealForDayToMealPlan
+}
 export default chef 

@@ -133,7 +133,7 @@ function MealPlanComponent({ mealPlan }) {
           <Box
             onDragOver={(e) => e.preventDefault()}
             onDrop={() => {
-              mealPlan.addMealFor(day.id, chef.getPickedMeal());
+              chef.addPickedMealForDayToMealPlan(day.id, mealPlan);
             }}
           >
             Gericht hierhin ziehen
