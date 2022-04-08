@@ -1,6 +1,11 @@
-import { Meal, createMealWithProperties } from "./meal.tsx";
+import {
+  Meal,
+  createMealWithProperties,
+  createMealFilterObject,
+} from "./meal.tsx";
 import chef from "./../chef.ts";
 import { useState } from "react";
+import { useSubscriber } from "./useSubscriber.ts";
 
 export interface RecipeBook {
   render();
@@ -18,6 +23,7 @@ export function createEmptyRecipeBook(): RecipeBook {
 }
 
 class RecipeBookImpl implements RecipeBook {
+  private filterObject = createMealFilterObject();
   private meals: Meal[];
   constructor(meals: Meal[]) {
     this.meals = meals;
@@ -26,35 +32,53 @@ class RecipeBookImpl implements RecipeBook {
     this.meals.push(meal);
   }
   render() {
-    return <RecipeBookWithPagination meals={this.meals} />;
+    return (
+      <RecipeBookWithPagination
+        meals={this.meals}
+        filterObject={this.filterObject}
+      />
+    );
   }
 }
 
-function RecipeBookWithPagination({ meals }) {
+function RecipeBookWithPagination({ meals, filterObject }) {
   const [currentPage, setCurrentPage] = useState(1);
+  const [filteredMeals, setFilteredMeals] = useState(meals);
+  const observer = (filter) => {
+    setFilteredMeals(
+      meals.filter((meal) => {
+        return filter.matches(meal);
+      })
+    );
+    setCurrentPage(1);
+  };
+  useSubscriber(filterObject, observer);
   return (
     <>
+      <>{filterObject.render()}</>
       <ConditionalRecipeBookPagination
-        meals={meals}
+        numberOfMeals={filteredMeals.length}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
       />
 
-      {meals.slice((currentPage - 1) * 7, currentPage * 7).map((meal, i) => {
-        return <RecipeBookEntry key={i} meal={meal}></RecipeBookEntry>;
-      })}
+      {filteredMeals
+        .slice((currentPage - 1) * 7, currentPage * 7)
+        .map((meal, i) => {
+          return <RecipeBookEntry key={i} meal={meal}></RecipeBookEntry>;
+        })}
     </>
   );
 }
 function ConditionalRecipeBookPagination({
-  meals,
+  numberOfMeals,
   currentPage,
   setCurrentPage,
 }) {
-  if (meals.length > 7) {
+  if (numberOfMeals > 7) {
     return (
       <RecipeBookPagination
-        numberOfPages={Math.floor((meals.length - 1) / 7) + 1}
+        numberOfPages={Math.floor((numberOfMeals - 1) / 7) + 1}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
       />
@@ -80,21 +104,20 @@ function RecipeBookEntry({ meal }) {
 }
 function RecipeBookPagination({ numberOfPages, currentPage, setCurrentPage }) {
   return (
-    <nav className="pagination" role="navigation" aria-label="pagination">
-      <button
-        className="pagination-previous"
-        disabled={currentPage === 1}
-        onClick={() => setCurrentPage(currentPage - 1)}
-      >
-        Vorherige
-      </button>
-      <button
-        className="pagination-next"
-        disabled={currentPage === numberOfPages}
-        onClick={() => setCurrentPage(currentPage + 1)}
-      >
-        Nächste
-      </button>
+    <nav
+      className="pagination is-centered"
+      role="navigation"
+      aria-label="pagination"
+    >
+      <PreviousPageButton
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      />
+      <NextPageButton
+        currentPage={currentPage}
+        numberOfPages={numberOfPages}
+        setCurrentPage={setCurrentPage}
+      />
       <ul className="pagination-list">
         <FirstPageButton
           currentPage={currentPage}
@@ -200,5 +223,29 @@ function LastPageButton({ numberOfPages, currentPage, setCurrentPage }) {
         />
       )}
     </>
+  );
+}
+
+function PreviousPageButton({ currentPage, setCurrentPage }) {
+  return (
+    <button
+      className="pagination-previous"
+      disabled={currentPage === 1}
+      onClick={() => setCurrentPage(currentPage - 1)}
+    >
+      Vorherige
+    </button>
+  );
+}
+
+function NextPageButton({ currentPage, numberOfPages, setCurrentPage }) {
+  return (
+    <button
+      className="pagination-next"
+      disabled={currentPage === numberOfPages}
+      onClick={() => setCurrentPage(currentPage + 1)}
+    >
+      Nächste
+    </button>
   );
 }

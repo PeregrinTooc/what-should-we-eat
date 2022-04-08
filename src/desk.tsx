@@ -33,7 +33,7 @@ function Desk({ mealPlan, recipeBook }) {
   };
   return (
     <Container>
-      <Heading>Was wollen wir essen?</Heading>
+      <Heading textAlign="center">Was wollen wir essen?</Heading>
       <Columns centered={true}>
         <Columns.Column>
           <div ref={printRef}>{mealPlan.render()}</div>
