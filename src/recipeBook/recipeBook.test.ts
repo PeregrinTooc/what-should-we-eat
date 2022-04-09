@@ -1,8 +1,8 @@
 import { createRecipeBookFromJson, createEmptyRecipeBook } from "./recipeBook";
 import { render, screen } from "@testing-library/react";
-import { mondayMeal } from "./resources/testMeals";
+import { mondayMeal, mondayMealName } from "../meals/resources/testMeals";
 import userEvent from "@testing-library/user-event";
-import { createMealWithProperties } from "./meal";
+import { createMealWithProperties } from "../meals/meal";
 
 function assertNumberOfPaginationEllipsesIs(i) {
   const paginationEllipsis = "\u2026";
@@ -18,7 +18,7 @@ function assertPagesAreShown(pagesTexts) {
     .getAllByRole("button")
     .map((button) => button.textContent)
     .filter((text) => {
-      return text !== "Nächste" && text !== "Vorherige";
+      return text !== "Nächste" && text !== "Vorherige" && text !== "Details";
     })
     .sort();
   let expectedButtonTexts = pagesTexts.sort();
@@ -29,12 +29,7 @@ function prepareWithMealsAndRender(numberOfMeals) {
   const recipeBook = createEmptyRecipeBook();
   for (let i = 0; i < numberOfMeals; i++) {
     const mealName = `Meal Number ${i}`;
-    recipeBook.add({
-      mealName: mealName,
-      renderAsListItemWithDetailsButton: () => {
-        return <p>{mealName}</p>;
-      },
-    });
+    recipeBook.add(createMealWithProperties({ mealName: mealName }));
   }
   render(recipeBook.render());
 }
@@ -51,14 +46,10 @@ it("should be possible to create a recipebook from JSON", () => {
   expect(recipeBook).toBeDefined();
 });
 it("should render itself and delegate rendering of its contents to the meals", () => {
-  let renderedAsListItem = false;
-  mondayMeal.renderAsListItemWithDetailsButton = (f) => {
-    renderedAsListItem = true;
-  };
   const recipeBook = createEmptyRecipeBook();
   recipeBook.add(mondayMeal);
   render(recipeBook.render());
-  expect(renderedAsListItem).toBe(true);
+  expect(screen.getByText(mondayMealName)).toBeDefined();
 });
 
 describe("filter", () => {

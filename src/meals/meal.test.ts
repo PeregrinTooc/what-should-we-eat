@@ -1,14 +1,16 @@
 import { render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mondayMeal, mondayMealName } from "./resources/testMeals";
-import { createMealFilterObject } from "./meal.tsx";
+import { createMealFilterObject } from "./MealNameFilter";
+import { MealNameFormat, MealListItemFormat, MealModalFormat, createMealWithProperties } from './meal';
 
 describe("tests for meal rendering", () => {
   it("should render as a modal", async () => {
-    mondayMeal.tags.push("Ofen");
-    render(mondayMeal.renderDetails());
+    const format = new MealModalFormat()
+    mondayMeal.export(format)
+    render(format.render());
     expect(screen.queryByText(mondayMealName)).not.toBeInTheDocument();
-    act(() => mondayMeal.showDetailScreen());
+    act(() => format.showDetailScreen());
     expect(screen.getByText(mondayMealName)).toBeInTheDocument();
     expect(screen.getByText("Kartoffeln")).toBeInTheDocument();
     expect(screen.getByText("Ofen")).toBeInTheDocument();
@@ -20,13 +22,21 @@ describe("tests for meal rendering", () => {
   });
 
   it("should render as a list item with a details button which opens the modal", async () => {
-    render(mondayMeal.renderAsListItemWithDetailsButton());
+    const format = new MealListItemFormat(mondayMeal)
+    mondayMeal.export(format)
+    render(format.render());
     expect(screen.getByText(mondayMealName)).toBeInTheDocument();
     const detailsButton = screen.getByRole("button");
     expect(detailsButton).toHaveTextContent("Details");
     expect(screen.queryByLabelText("close")).not.toBeInTheDocument();
     userEvent.click(detailsButton);
     expect(screen.getByLabelText("close")).toBeInTheDocument();
+  });
+  it("should render its name", async () => {
+    const format = new MealNameFormat();
+    mondayMeal.export(format)
+    render(format.render())
+    expect(screen.getByText(mondayMealName)).toBeInTheDocument();
   });
 });
 
@@ -63,7 +73,7 @@ describe("tests for meal filtering", () => {
     expect(input).toHaveValue("");
     userEvent.type(input, "asdf");
     expect(filterObject.matches(mondayMeal)).toEqual(false);
-    expect(filterObject.matches({ mealName: "asdf" })).toEqual(true);
+    expect(filterObject.matches(createMealWithProperties({ mealName: "asdf" }))).toEqual(true);
   });
 
   it("should inform subscribers about changes", () => {

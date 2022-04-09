@@ -1,4 +1,4 @@
-import { MealPlan } from "./meals/mealPlan.tsx";
+import { MealPlan } from "./mealPlan/mealPlan.tsx";
 import { RecipeBook } from "./meals/recipeBook.tsx";
 import { Button, Columns, Container, Heading } from "react-bulma-components";
 import html2canvas from "html2canvas";

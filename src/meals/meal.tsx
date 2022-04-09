@@ -1,68 +1,19 @@
 import React, { useState } from "react";
 import { Modal } from "react-bulma-components";
-import { useSubscriber, Publisher, defaultPublisher } from "./useSubscriber.ts";
+import {
+  useSubscriber,
+  Publisher,
+  defaultPublisher,
+} from "../utils/useSubscriber.ts";
 
-interface Filter {
-  matches(object: Object): boolean;
-  render();
-}
-
-interface CompoundFilter extends Filter {
-  compositeHasChanged(): void;
+export interface MealFormat {
+  render(): JSX.Element;
+  setProperties(mealProperties: Object);
 }
 
 export interface Meal {
-  renderName(): any;
-  renderAsListItemWithDetailsButton(): any;
-  renderDetails(): any;
-  showDetailScreen(): void;
-  closeDetailScreen(): void;
   isEmpty(): boolean;
-}
-
-class MealNameFilter implements Filter {
-  compoundFilter: CompoundFilter;
-  value: string = "";
-  constructor(compoundFilter: CompoundFilter) {
-    this.compoundFilter = compoundFilter;
-  }
-  toMatchContain(value: string) {
-    this.value = value.toLowerCase();
-    this.compoundFilter.compositeHasChanged();
-  }
-  matches(mealName: string): boolean {
-    return mealName.toLowerCase().indexOf(this.value) > -1;
-  }
-  render() {
-    return (
-      <MealFilterBarName toMatchContain={this.toMatchContain.bind(this)} />
-    );
-  }
-}
-
-class MealFilter implements CompoundFilter, Publisher {
-  compositeHasChanged(): void {
-    this.publish(this);
-  }
-  observers: Function[] = [];
-  subscribe = defaultPublisher.subscribe.bind(this);
-  unsubscribe = defaultPublisher.unsubscribe.bind(this);
-  publish = defaultPublisher.publish.bind(this);
-  mealNameFilter = new MealNameFilter(this);
-  addFilterForName(): MealNameFilter {
-    return this.mealNameFilter;
-  }
-
-  matches(meal: MealImpl): boolean {
-    return this.mealNameFilter.matches(meal.mealName);
-  }
-  render() {
-    return <>{this.mealNameFilter.render()}</>;
-  }
-}
-
-export function createMealFilterObject(): Filter {
-  return new MealFilter();
+  export(formatter: MealFormat): void;
 }
 
 class MealImpl implements Meal, Publisher {
@@ -70,54 +21,21 @@ class MealImpl implements Meal, Publisher {
   effort: number;
   tags: string[] | any;
   healthLevel: number;
-  showDetails: boolean;
-  observers: Function[] = [];
-  subscribe = defaultPublisher.subscribe.bind(this);
-  unsubscribe = defaultPublisher.unsubscribe.bind(this);
-  publish = defaultPublisher.publish.bind(this);
   constructor(properties) {
     this.mealName = properties.mealName ? properties.mealName : "";
     this.effort = properties.effort ? properties.effort : "";
     this.tags = properties.tags ? [...properties.tags] : "";
     this.healthLevel = properties.healthLevel ? properties.healthLevel : "";
-    this.showDetails = false;
   }
-  renderName() {
-    return <MealNameComponent meal={this} />;
+  export(formatter: MealFormat): void {
+    formatter.setProperties({ ...this });
   }
-  renderAsListItemWithDetailsButton() {
-    return (
-      <>
-        {this.renderDetails()}
-        <MealListItemComponent key={this.mealName} meal={this} />
-      </>
-    );
-  }
-  renderDetails() {
-    return <MealModal key={`${this.mealName}-details`} meal={this}></MealModal>;
-  }
-  // use the inline function syntax so the methods are copied by the spread operator
-  // and the method can be passed as a handler
-  showDetailScreen = () => {
-    this.showDetails = true;
-    this.publish();
-  };
-
-  closeDetailScreen = () => {
-    this.showDetails = false;
-    this.publish();
-  };
   isEmpty = () => {
     return this.mealName === "";
   };
 }
 
 const emptyMeal = new MealImpl({});
-
-export function createMealFromJSON(meal: string): Meal {
-  const mealProps = JSON.parse(meal);
-  return new MealImpl({ ...mealProps });
-}
 
 export function createMealWithProperties(mealProps: Object): Meal {
   return new MealImpl({ ...mealProps });
@@ -127,26 +45,102 @@ export function createEmptyMeal(): Meal {
   return emptyMeal;
 }
 
-function MealNameComponent({ meal }) {
-  return <p>{meal.mealName}</p>;
+export class MealNameFormat implements MealFormat {
+  public mealName: string;
+  render(): JSX.Element {
+    return <MealNameComponent mealName={this.mealName} />;
+  }
+  setProperties({ mealName }) {
+    this.mealName = mealName;
+  }
 }
-function MealModal({ meal }) {
-  const [state, setState] = useState({ ...meal });
+
+function MealNameComponent({ mealName }) {
+  return <p>{mealName}</p>;
+}
+export class MealListItemFormat implements MealFormat {
+  private meal: Meal;
+  public mealName: string;
+  constructor(meal) {
+    this.meal = meal;
+  }
+  render(): JSX.Element {
+    const modalFormat = new MealModalFormat();
+    this.meal.export(modalFormat);
+    return (
+      <>
+        {modalFormat.render()}
+        <MealListItemComponentWithDetailsButton
+          key={this.mealName}
+          mealName={this.mealName}
+          showDetailScreen={modalFormat.showDetailScreen.bind(modalFormat)}
+        />
+      </>
+    );
+  }
+  setProperties(meal) {
+    this.mealName = meal.mealName;
+  }
+}
+
+export class MealModalFormat implements MealFormat, Publisher {
+  observers: Function[] = [];
+  subscribe = defaultPublisher.subscribe.bind(this);
+  unsubscribe = defaultPublisher.unsubscribe.bind(this);
+  publish = defaultPublisher.publish.bind(this);
+  showDetailScreen() {
+    this.showDetails = true;
+    this.publish();
+  }
+
+  closeDetailScreen() {
+    this.showDetails = false;
+    this.publish();
+  }
+  public mealName: string;
+  public effort: number;
+  public tags: string[] | any;
+  public healthLevel: number;
+  private showDetails: boolean;
+  constructor() {
+    this.showDetails = false;
+  }
+  render(): JSX.Element {
+    return (
+      <MealModal
+        key={`${this.mealName}-details`}
+        mealFormat={this}
+        closeDetailScreen={this.closeDetailScreen.bind(this)}
+      ></MealModal>
+    );
+  }
+  setProperties({ mealName, effort, tags, healthLevel }) {
+    this.mealName = mealName;
+    this.effort = effort;
+    this.tags = tags;
+    this.healthLevel = healthLevel;
+  }
+}
+
+function MealModal({ mealFormat, closeDetailScreen }) {
+  const [{ showDetails }, setState] = useState({
+    showDetails: mealFormat.showDetails,
+  });
   const observer = (o) => {
-    if (o.showDetails !== state.showDetails) {
+    if (o.showDetails !== showDetails) {
       setState({ ...o });
     }
   };
-  useSubscriber(meal, observer);
+  useSubscriber(mealFormat, observer);
   return (
     <>
-      <Modal show={state.showDetails} onClose={state.closeDetailScreen}>
+      <Modal show={showDetails} onClose={closeDetailScreen}>
         <Modal.Card>
           <Modal.Card.Header showClose>
-            <Modal.Card.Title>{state.mealName}</Modal.Card.Title>
+            <Modal.Card.Title>{mealFormat.mealName}</Modal.Card.Title>
           </Modal.Card.Header>
           <Modal.Card.Body>
-            <MealDetails state={state} />
+            <MealDetails mealFormat={mealFormat} />
           </Modal.Card.Body>
         </Modal.Card>
       </Modal>
@@ -154,17 +148,20 @@ function MealModal({ meal }) {
   );
 }
 
-function MealListItemComponent({ meal }) {
+function MealListItemComponentWithDetailsButton({
+  mealName,
+  showDetailScreen,
+}) {
   return (
     <div className="media">
       <div className="media-content">
-        <MealNameComponent meal={meal}></MealNameComponent>
+        <MealNameComponent mealName={mealName}></MealNameComponent>
       </div>
       <div className="media-right">
         <button
           className="button"
           onClick={() => {
-            meal.showDetailScreen();
+            showDetailScreen();
           }}
         >
           Details
@@ -174,19 +171,19 @@ function MealListItemComponent({ meal }) {
   );
 }
 
-function MealDetails({ state }) {
+function MealDetails({ mealFormat }) {
   return (
     <div className="media">
       <div className="media-left">
         <div className="content">
-          <p>Aufwand: {state.effort}/10</p>
-          <p>Gesundheitslevel: {state.healthLevel}/10</p>
+          <p>Aufwand: {mealFormat.effort}/10</p>
+          <p>Gesundheitslevel: {mealFormat.healthLevel}/10</p>
         </div>
       </div>
       <div className="media-content"></div>
       <div className="media-right">
         <div className="tags are-medium">
-          {state.tags.map((tag) => {
+          {mealFormat.tags.map((tag) => {
             return (
               <div className="tag" key={tag}>
                 {tag}
@@ -194,26 +191,6 @@ function MealDetails({ state }) {
             );
           })}
         </div>
-      </div>
-    </div>
-  );
-}
-
-function MealFilterBarName({ toMatchContain }) {
-  const [mealName, setMealName] = useState("");
-  return (
-    <div className="field">
-      <label className="label">Name</label>
-      <div className="control">
-        <input
-          className="input"
-          value={mealName}
-          type="text"
-          onChange={(e) => {
-            setMealName(e.target.value);
-            toMatchContain(e.target.value);
-          }}
-        ></input>
       </div>
     </div>
   );

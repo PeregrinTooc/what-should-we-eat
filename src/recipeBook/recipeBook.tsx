@@ -1,11 +1,12 @@
 import {
   Meal,
   createMealWithProperties,
-  createMealFilterObject,
-} from "./meal.tsx";
+  MealListItemFormat,
+} from "./../meals/meal.tsx";
+import { createMealFilterObject } from "./../meals/MealNameFilter.tsx";
 import chef from "./../chef.ts";
 import { useState } from "react";
-import { useSubscriber } from "./useSubscriber.ts";
+import { useSubscriber } from "./../utils/useSubscriber.ts";
 
 export interface RecipeBook {
   render();
@@ -88,6 +89,8 @@ function ConditionalRecipeBookPagination({
   }
 }
 function RecipeBookEntry({ meal }) {
+  const format = new MealListItemFormat(meal);
+  meal.export(format);
   return (
     <>
       <div
@@ -97,7 +100,7 @@ function RecipeBookEntry({ meal }) {
           chef.pickMeal(meal);
         }}
       >
-        {meal.renderAsListItemWithDetailsButton()}
+        {format.render()}
       </div>
     </>
   );

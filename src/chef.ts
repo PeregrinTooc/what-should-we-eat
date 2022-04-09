@@ -1,7 +1,7 @@
 import axios from "axios";
-import { Meal } from "./meal.tsx";
-import { createEmptyMealPlan, MealPlan } from "./meals/mealPlan.tsx";
-import { createRecipeBookFromJson, RecipeBook } from "./meals/recipeBook.tsx";
+import { Meal } from "./meals/meal.tsx";
+import { createEmptyMealPlan, MealPlan } from "./mealPlan/mealPlan.tsx";
+import { createRecipeBookFromJson, RecipeBook } from "./recipeBook/recipeBook.tsx";
 import { Buffer } from 'buffer';
 
 
