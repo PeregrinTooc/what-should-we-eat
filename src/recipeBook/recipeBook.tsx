@@ -1,21 +1,21 @@
 import {
-  Meal,
-  createMealWithProperties,
-  MealListItemFormat,
-} from "./../meals/meal.tsx";
-import { createMealFilterObject } from "./../meals/MealNameFilter.tsx";
+  Dish,
+  createDishWithProperties,
+  DishListItemFormat,
+} from "./../dishes/Dish.tsx";
+import { createDishFilterObject } from "./../dishes/DishNameFilter.tsx";
 import chef from "./../chef.ts";
 import { useState } from "react";
 import { useSubscriber } from "./../utils/useSubscriber.ts";
 
 export interface RecipeBook {
   render();
-  add(meal: Meal);
+  add(dish: Dish);
 }
 
-export function createRecipeBookFromJson(mealsJSON: string): RecipeBook {
+export function createRecipeBookFromJson(dishesJSON: string): RecipeBook {
   return new RecipeBookImpl(
-    JSON.parse(mealsJSON).meals.map((meal) => createMealWithProperties(meal))
+    JSON.parse(dishesJSON).dishes.map((dish) => createDishWithProperties(dish))
   );
 }
 
@@ -24,31 +24,31 @@ export function createEmptyRecipeBook(): RecipeBook {
 }
 
 class RecipeBookImpl implements RecipeBook {
-  private filterObject = createMealFilterObject();
-  private meals: Meal[];
-  constructor(meals: Meal[]) {
-    this.meals = meals;
+  private filterObject = createDishFilterObject();
+  private dishes: Dish[];
+  constructor(dishes: Dish[]) {
+    this.dishes = dishes;
   }
-  add(meal: Meal) {
-    this.meals.push(meal);
+  add(dish: Dish) {
+    this.dishes.push(dish);
   }
   render() {
     return (
       <RecipeBookWithPagination
-        meals={this.meals}
+        dishes={this.dishes}
         filterObject={this.filterObject}
       />
     );
   }
 }
 
-function RecipeBookWithPagination({ meals, filterObject }) {
+function RecipeBookWithPagination({ dishes, filterObject }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const [filteredMeals, setFilteredMeals] = useState(meals);
+  const [filteredDishes, setFilteredDishes] = useState(dishes);
   const observer = (filter) => {
-    setFilteredMeals(
-      meals.filter((meal) => {
-        return filter.matches(meal);
+    setFilteredDishes(
+      dishes.filter((dish) => {
+        return filter.matches(dish);
       })
     );
     setCurrentPage(1);
@@ -58,28 +58,28 @@ function RecipeBookWithPagination({ meals, filterObject }) {
     <>
       <>{filterObject.render()}</>
       <ConditionalRecipeBookPagination
-        numberOfMeals={filteredMeals.length}
+        numberOfDishes={filteredDishes.length}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
       />
 
-      {filteredMeals
+      {filteredDishes
         .slice((currentPage - 1) * 7, currentPage * 7)
-        .map((meal, i) => {
-          return <RecipeBookEntry key={i} meal={meal}></RecipeBookEntry>;
+        .map((dish, i) => {
+          return <RecipeBookEntry key={i} dish={dish}></RecipeBookEntry>;
         })}
     </>
   );
 }
 function ConditionalRecipeBookPagination({
-  numberOfMeals,
+  numberOfDishes,
   currentPage,
   setCurrentPage,
 }) {
-  if (numberOfMeals > 7) {
+  if (numberOfDishes > 7) {
     return (
       <RecipeBookPagination
-        numberOfPages={Math.floor((numberOfMeals - 1) / 7) + 1}
+        numberOfPages={Math.floor((numberOfDishes - 1) / 7) + 1}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
       />
@@ -88,16 +88,16 @@ function ConditionalRecipeBookPagination({
     return <></>;
   }
 }
-function RecipeBookEntry({ meal }) {
-  const format = new MealListItemFormat(meal);
-  meal.export(format);
+function RecipeBookEntry({ dish }) {
+  const format = new DishListItemFormat(dish);
+  dish.export(format);
   return (
     <>
       <div
         className="box"
         draggable
         onDragStart={() => {
-          chef.pickMeal(meal);
+          chef.pickDish(dish);
         }}
       >
         {format.render()}

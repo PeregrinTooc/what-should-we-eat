@@ -6,84 +6,84 @@ import {
   defaultPublisher,
 } from "../utils/useSubscriber.ts";
 
-export interface MealFormat {
+export interface DishFormat {
   render(): JSX.Element;
-  setProperties(mealProperties: Object);
+  setProperties(dishProperties: Object);
 }
 
-export interface Meal {
+export interface Dish {
   isEmpty(): boolean;
-  export(formatter: MealFormat): void;
+  export(formatter: DishFormat): void;
 }
 
-class MealImpl implements Meal, Publisher {
-  mealName: string;
+class DishImpl implements Dish, Publisher {
+  dishName: string;
   effort: number;
   tags: string[] | any;
   healthLevel: number;
   constructor(properties) {
-    this.mealName = properties.mealName ? properties.mealName : "";
+    this.dishName = properties.dishName ? properties.dishName : "";
     this.effort = properties.effort ? properties.effort : "";
     this.tags = properties.tags ? [...properties.tags] : "";
     this.healthLevel = properties.healthLevel ? properties.healthLevel : "";
   }
-  export(formatter: MealFormat): void {
+  export(formatter: DishFormat): void {
     formatter.setProperties({ ...this });
   }
   isEmpty = () => {
-    return this.mealName === "";
+    return this.dishName === "";
   };
 }
 
-const emptyMeal = new MealImpl({});
+const emptyDish = new DishImpl({});
 
-export function createMealWithProperties(mealProps: Object): Meal {
-  return new MealImpl({ ...mealProps });
+export function createDishWithProperties(dishProps: Object): Dish {
+  return new DishImpl({ ...dishProps });
 }
 
-export function createEmptyMeal(): Meal {
-  return emptyMeal;
+export function createEmptyDish(): Dish {
+  return emptyDish;
 }
 
-export class MealNameFormat implements MealFormat {
-  public mealName: string;
+export class DishNameFormat implements DishFormat {
+  public dishName: string;
   render(): JSX.Element {
-    return <MealNameComponent mealName={this.mealName} />;
+    return <DishNameComponent dishName={this.dishName} />;
   }
-  setProperties({ mealName }) {
-    this.mealName = mealName;
+  setProperties({ dishName }) {
+    this.dishName = dishName;
   }
 }
 
-function MealNameComponent({ mealName }) {
-  return <p>{mealName}</p>;
+function DishNameComponent({ dishName }) {
+  return <p>{dishName}</p>;
 }
-export class MealListItemFormat implements MealFormat {
-  private meal: Meal;
-  public mealName: string;
-  constructor(meal) {
-    this.meal = meal;
+export class DishListItemFormat implements DishFormat {
+  private dish: Dish;
+  public dishName: string;
+  constructor(dish) {
+    this.dish = dish;
   }
   render(): JSX.Element {
-    const modalFormat = new MealModalFormat();
-    this.meal.export(modalFormat);
+    const modalFormat = new DishModalFormat();
+    this.dish.export(modalFormat);
     return (
       <>
         {modalFormat.render()}
-        <MealListItemComponentWithDetailsButton
-          key={this.mealName}
-          mealName={this.mealName}
+        <DishListItemComponentWithDetailsButton
+          key={this.dishName}
+          dishName={this.dishName}
           showDetailScreen={modalFormat.showDetailScreen.bind(modalFormat)}
         />
       </>
     );
   }
-  setProperties(meal) {
-    this.mealName = meal.mealName;
+  setProperties(dish) {
+    this.dishName = dish.dishName;
   }
 }
 
-export class MealModalFormat implements MealFormat, Publisher {
+export class DishModalFormat implements DishFormat, Publisher {
   observers: Function[] = [];
   subscribe = defaultPublisher.subscribe.bind(this);
   unsubscribe = defaultPublisher.unsubscribe.bind(this);
@@ -97,7 +97,7 @@ export class MealModalFormat implements MealFormat, Publisher {
     this.showDetails = false;
     this.publish();
   }
-  public mealName: string;
+  public dishName: string;
   public effort: number;
   public tags: string[] | any;
   public healthLevel: number;
@@ -107,40 +107,40 @@ export class MealModalFormat implements MealFormat, Publisher {
   }
   render(): JSX.Element {
     return (
-      <MealModal
-        key={`${this.mealName}-details`}
-        mealFormat={this}
+      <DishModal
+        key={`${this.dishName}-details`}
+        dishFormat={this}
         closeDetailScreen={this.closeDetailScreen.bind(this)}
-      ></MealModal>
+      ></DishModal>
     );
   }
-  setProperties({ mealName, effort, tags, healthLevel }) {
-    this.mealName = mealName;
+  setProperties({ dishName, effort, tags, healthLevel }) {
+    this.dishName = dishName;
     this.effort = effort;
     this.tags = tags;
     this.healthLevel = healthLevel;
   }
 }
 
-function MealModal({ mealFormat, closeDetailScreen }) {
+function DishModal({ dishFormat, closeDetailScreen }) {
   const [{ showDetails }, setState] = useState({
-    showDetails: mealFormat.showDetails,
+    showDetails: dishFormat.showDetails,
   });
   const observer = (o) => {
     if (o.showDetails !== showDetails) {
       setState({ ...o });
     }
   };
-  useSubscriber(mealFormat, observer);
+  useSubscriber(dishFormat, observer);
   return (
     <>
       <Modal show={showDetails} onClose={closeDetailScreen}>
         <Modal.Card>
           <Modal.Card.Header showClose>
-            <Modal.Card.Title>{mealFormat.mealName}</Modal.Card.Title>
+            <Modal.Card.Title>{dishFormat.dishName}</Modal.Card.Title>
           </Modal.Card.Header>
           <Modal.Card.Body>
-            <MealDetails mealFormat={mealFormat} />
+            <DishDetails dishFormat={dishFormat} />
           </Modal.Card.Body>
         </Modal.Card>
       </Modal>
@@ -148,14 +148,14 @@ function MealModal({ mealFormat, closeDetailScreen }) {
   );
 }
 
-function MealListItemComponentWithDetailsButton({
-  mealName,
+function DishListItemComponentWithDetailsButton({
+  dishName,
   showDetailScreen,
 }) {
   return (
     <div className="media">
       <div className="media-content">
-        <MealNameComponent mealName={mealName}></MealNameComponent>
+        <DishNameComponent dishName={dishName}></DishNameComponent>
       </div>
       <div className="media-right">
         <button
@@ -171,19 +171,19 @@ function MealListItemComponentWithDetailsButton({
   );
 }
 
-function MealDetails({ mealFormat }) {
+function DishDetails({ dishFormat }) {
   return (
     <div className="media">
       <div className="media-left">
         <div className="content">
-          <p>Aufwand: {mealFormat.effort}/10</p>
-          <p>Gesundheitslevel: {mealFormat.healthLevel}/10</p>
+          <p>Aufwand: {dishFormat.effort}/10</p>
+          <p>Gesundheitslevel: {dishFormat.healthLevel}/10</p>
         </div>
       </div>
       <div className="media-content"></div>
       <div className="media-right">
         <div className="tags are-medium">
-          {mealFormat.tags.map((tag) => {
+          {dishFormat.tags.map((tag) => {
             return (
               <div className="tag" key={tag}>
                 {tag}

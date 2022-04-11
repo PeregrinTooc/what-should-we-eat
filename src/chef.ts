@@ -1,11 +1,11 @@
 import axios from "axios";
-import { Meal } from "./meals/meal.tsx";
-import { createEmptyMealPlan, MealPlan } from "./mealPlan/mealPlan.tsx";
+import { Dish } from "./dishes/dish.tsx";
+import { createEmptyDishPlan, DishPlan } from "./dishPlan/dishPlan.tsx";
 import { createRecipeBookFromJson, RecipeBook } from "./recipeBook/recipeBook.tsx";
 import { Buffer } from 'buffer';
 
 
-let pickedMeal: Meal
+let pickedDish: Dish
 
 async function getRecipeBook(): RecipeBook {
 
@@ -16,29 +16,29 @@ async function getRecipeBook(): RecipeBook {
         const rpc = axios.create({
             baseURL: "https://api.github.com/repos/PeregrinTooc/what-should-we-eat/contents",
         });
-        const responseInGitHubFormat = await rpc.get("/src/meals/resources/meals.json");
-        let base64FormatEncodedMealsData = responseInGitHubFormat.data.content;
-        return Buffer.from(base64FormatEncodedMealsData, "base64").toString();
+        const responseInGitHubFormat = await rpc.get("/src/dishes/resources/dishes.json");
+        let base64FormatEncodedDishesData = responseInGitHubFormat.data.content;
+        return Buffer.from(base64FormatEncodedDishesData, "base64").toString();
     }
     return createRecipeBookFromJson(await init())
 }
 
-function pickMeal(meal: Meal) {
-    pickedMeal = meal
+function pickDish(dish: Dish) {
+    pickedDish = dish
 }
 
-function getMealPlan(): MealPlan {
-    return createEmptyMealPlan()
+function getDishPlan(): DishPlan {
+    return createEmptyDishPlan()
 }
 
-function addPickedMealForDayToMealPlan(dayId, mealPlan): void {
-    mealPlan.addMealFor(dayId, pickedMeal);
+function addPickedDishForDayToDishPlan(dayId, dishPlan): void {
+    dishPlan.addDishFor(dayId, pickedDish);
 }
 
 const chef = {
-    pickMeal: pickMeal,
-    getMealPlan: getMealPlan,
+    pickDish: pickDish,
+    getDishPlan: getDishPlan,
     getRecipeBook: getRecipeBook,
-    addPickedMealForDayToMealPlan: addPickedMealForDayToMealPlan
+    addPickedDishForDayToDishPlan: addPickedDishForDayToDishPlan
 }
 export default chef 

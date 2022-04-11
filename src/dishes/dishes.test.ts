@@ -1,31 +1,31 @@
 import { render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mondayMeal, mondayMealName } from "./resources/testMeals";
-import { createMealFilterObject } from "./MealNameFilter";
-import { MealNameFormat, MealListItemFormat, MealModalFormat, createMealWithProperties } from './meal';
+import { mondayDish, mondayDishName } from "./resources/testDishes";
+import { createDishFilterObject } from "./DishNameFilter";
+import { DishNameFormat, DishListItemFormat, DishModalFormat, createDishWithProperties } from './Dish';
 
-describe("tests for meal rendering", () => {
+describe("tests for dish rendering", () => {
   it("should render as a modal", async () => {
-    const format = new MealModalFormat()
-    mondayMeal.export(format)
+    const format = new DishModalFormat()
+    mondayDish.export(format)
     render(format.render());
-    expect(screen.queryByText(mondayMealName)).not.toBeInTheDocument();
+    expect(screen.queryByText(mondayDishName)).not.toBeInTheDocument();
     act(() => format.showDetailScreen());
-    expect(screen.getByText(mondayMealName)).toBeInTheDocument();
+    expect(screen.getByText(mondayDishName)).toBeInTheDocument();
     expect(screen.getByText("Kartoffeln")).toBeInTheDocument();
     expect(screen.getByText("Ofen")).toBeInTheDocument();
     expect(screen.getByText("Aufwand: 3/10")).toBeInTheDocument();
     expect(screen.getByText("Gesundheitslevel: 7/10")).toBeInTheDocument();
     const closeButton = screen.getByLabelText("close");
     await userEvent.click(closeButton);
-    expect(screen.queryByText(mondayMealName)).not.toBeInTheDocument();
+    expect(screen.queryByText(mondayDishName)).not.toBeInTheDocument();
   });
 
   it("should render as a list item with a details button which opens the modal", async () => {
-    const format = new MealListItemFormat(mondayMeal)
-    mondayMeal.export(format)
+    const format = new DishListItemFormat(mondayDish)
+    mondayDish.export(format)
     render(format.render());
-    expect(screen.getByText(mondayMealName)).toBeInTheDocument();
+    expect(screen.getByText(mondayDishName)).toBeInTheDocument();
     const detailsButton = screen.getByRole("button");
     expect(detailsButton).toHaveTextContent("Details");
     expect(screen.queryByLabelText("close")).not.toBeInTheDocument();
@@ -33,21 +33,25 @@ describe("tests for meal rendering", () => {
     expect(screen.getByLabelText("close")).toBeInTheDocument();
   });
   it("should render its name", async () => {
-    const format = new MealNameFormat();
-    mondayMeal.export(format)
+    const format = new DishNameFormat();
+    mondayDish.export(format)
     render(format.render())
-    expect(screen.getByText(mondayMealName)).toBeInTheDocument();
+    expect(screen.getByText(mondayDishName)).toBeInTheDocument();
   });
 });
 
-describe("tests for meal filtering", () => {
+describe('tests for changes to dishes', () => {
+
+});
+
+describe("tests for dish filtering", () => {
   let filterObject;
   beforeEach(() => {
-    filterObject = createMealFilterObject();
+    filterObject = createDishFilterObject();
   });
 
   it.each([
-    [mondayMealName, true],
+    [mondayDishName, true],
     ["Gemüse", true],
     ["gemüse", true],
     ["", true],
@@ -56,7 +60,7 @@ describe("tests for meal filtering", () => {
     "filters for name case-insensitive and matches empty strings",
     (input, expected) => {
       filterObject.addFilterForName().toMatchContain(input);
-      expect(filterObject.matches(mondayMeal)).toEqual(expected);
+      expect(filterObject.matches(mondayDish)).toEqual(expected);
     }
   );
 
@@ -72,8 +76,8 @@ describe("tests for meal filtering", () => {
     userEvent.clear(input);
     expect(input).toHaveValue("");
     userEvent.type(input, "asdf");
-    expect(filterObject.matches(mondayMeal)).toEqual(false);
-    expect(filterObject.matches(createMealWithProperties({ mealName: "asdf" }))).toEqual(true);
+    expect(filterObject.matches(mondayDish)).toEqual(false);
+    expect(filterObject.matches(createDishWithProperties({ dishName: "asdf" }))).toEqual(true);
   });
 
   it("should inform subscribers about changes", () => {

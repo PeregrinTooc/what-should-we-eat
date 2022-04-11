@@ -1,17 +1,17 @@
-import { MealPlan } from "./mealPlan/mealPlan.tsx";
-import { RecipeBook } from "./meals/recipeBook.tsx";
+import { DishPlan } from "./dishPlan/dishPlan.tsx";
+import { RecipeBook } from "./dishes/recipeBook.tsx";
 import { Button, Columns, Container, Heading } from "react-bulma-components";
 import html2canvas from "html2canvas";
 import { useRef } from "react";
-function createDesk(mealPlan: MealPlan, recipeBook: RecipeBook) {
+function createDesk(dishPlan: DishPlan, recipeBook: RecipeBook) {
   return {
     render: () => {
-      return <Desk mealPlan={mealPlan} recipeBook={recipeBook} />;
+      return <Desk dishPlan={dishPlan} recipeBook={recipeBook} />;
     },
   };
 }
 
-function Desk({ mealPlan, recipeBook }) {
+function Desk({ dishPlan, recipeBook }) {
   const saveAsImage = async (element) => {
     const canvas = await html2canvas(element);
     const data = canvas.toDataURL("image/png");
@@ -36,7 +36,7 @@ function Desk({ mealPlan, recipeBook }) {
       <Heading textAlign="center">Was wollen wir essen?</Heading>
       <Columns centered={true}>
         <Columns.Column>
-          <div ref={printRef}>{mealPlan.render()}</div>
+          <div ref={printRef}>{dishPlan.render()}</div>
           <div className="pt-4">
             <Button onClick={handleDownloadImage}>Als Bild Speichern</Button>
           </div>

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Filter, CompoundFilter } from "../utils/Filter";
 import { Publisher, defaultPublisher } from "../utils/useSubscriber.ts";
-import { Meal, MealNameFormat } from "./meal.tsx";
+import { Dish, DishNameFormat } from "./Dish.tsx";
 
-class MealNameFilter implements Filter {
+class DishNameFilter implements Filter {
   compoundFilter: CompoundFilter;
   value: string = "";
   constructor(compoundFilter: CompoundFilter) {
@@ -13,17 +13,17 @@ class MealNameFilter implements Filter {
     this.value = value.toLowerCase();
     this.compoundFilter.compositeHasChanged();
   }
-  matches(mealName: string): boolean {
-    return mealName.toLowerCase().indexOf(this.value) > -1;
+  matches(dishName: string): boolean {
+    return dishName.toLowerCase().indexOf(this.value) > -1;
   }
   render() {
     return (
-      <MealFilterBarName toMatchContain={this.toMatchContain.bind(this)} />
+      <DishFilterBarName toMatchContain={this.toMatchContain.bind(this)} />
     );
   }
 }
-class MealFilter implements CompoundFilter, Publisher {
-  mealNameFormat = new MealNameFormat();
+class DishFilter implements CompoundFilter, Publisher {
+  dishNameFormat = new DishNameFormat();
   compositeHasChanged(): void {
     this.publish(this);
   }
@@ -31,36 +31,36 @@ class MealFilter implements CompoundFilter, Publisher {
   subscribe = defaultPublisher.subscribe.bind(this);
   unsubscribe = defaultPublisher.unsubscribe.bind(this);
   publish = defaultPublisher.publish.bind(this);
-  mealNameFilter = new MealNameFilter(this);
-  addFilterForName(): MealNameFilter {
-    return this.mealNameFilter;
+  dishNameFilter = new DishNameFilter(this);
+  addFilterForName(): DishNameFilter {
+    return this.dishNameFilter;
   }
 
-  matches(meal: Meal): boolean {
-    meal.export(this.mealNameFormat);
-    return this.mealNameFilter.matches(this.mealNameFormat.mealName);
+  matches(dish: Dish): boolean {
+    dish.export(this.dishNameFormat);
+    return this.dishNameFilter.matches(this.dishNameFormat.dishName);
   }
   render() {
-    return <>{this.mealNameFilter.render()}</>;
+    return <>{this.dishNameFilter.render()}</>;
   }
 }
 
-export function createMealFilterObject(): Filter {
-  return new MealFilter();
+export function createDishFilterObject(): Filter {
+  return new DishFilter();
 }
 
-function MealFilterBarName({ toMatchContain }) {
-  const [mealName, setMealName] = useState("");
+function DishFilterBarName({ toMatchContain }) {
+  const [dishName, setDishName] = useState("");
   return (
     <div className="field">
       <label className="label">Name</label>
       <div className="control">
         <input
           className="input"
-          value={mealName}
+          value={dishName}
           type="text"
           onChange={(e) => {
-            setMealName(e.target.value);
+            setDishName(e.target.value);
             toMatchContain(e.target.value);
           }}
         ></input>

@@ -95,13 +95,13 @@
                     <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe flex-start; justify-content: unsafe flex-start; width: 410px; height: 1px; padding-top: 1573px; margin-left: 1116px;">
                         <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: left; max-height: 40px; overflow: hidden;">
                             <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: none; white-space: normal; overflow-wrap: normal;">
-                                Creates Mealplans and posts them to the kitchen wall or puts them in the cookie Jar
+                                Creates Dishplans and posts them to the kitchen wall or puts them in the cookie Jar
                             </div>
                         </div>
                     </div>
                 </foreignObject>
                 <text x="1116" y="1585" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="12px">
-                    Creates Mealplans and posts them to the kitchen wall or puts them in...
+                    Creates Dishplans and posts them to the kitchen wall or puts them in...
                 </text>
             </switch>
         </g>
@@ -117,7 +117,7 @@
         </g>
         <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-1114-1667-412-26-0)" font-size="12px">
             <text x="1115.5" y="1679.5">
-                Search in RecipeBook for Meals to add to the MealPlan
+                Search in RecipeBook for Dishes to add to the DishPlan
             </text>
         </g>
         <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-1114-1693-412-26-0)" font-size="12px">
@@ -131,13 +131,13 @@
                     <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe flex-start; justify-content: unsafe flex-start; width: 410px; height: 1px; padding-top: 1721px; margin-left: 1116px;">
                         <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: left; max-height: 32px; overflow: hidden;">
                             <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: none; white-space: normal; overflow-wrap: normal;">
-                                Asks InventoryManager for Meals that are available in the Freezer
+                                Asks InventoryManager for Dishes that are available in the Freezer
                             </div>
                         </div>
                     </div>
                 </foreignObject>
                 <text x="1116" y="1733" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="12px">
-                    Asks InventoryManager for Meals that are available in the Freezer
+                    Asks InventoryManager for Dishes that are available in the Freezer
                 </text>
             </switch>
         </g>
@@ -147,13 +147,13 @@
                     <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe flex-start; justify-content: unsafe flex-start; width: 410px; height: 1px; padding-top: 1757px; margin-left: 1116px;">
                         <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: left; max-height: 32px; overflow: hidden;">
                             <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: none; white-space: normal; overflow-wrap: normal;">
-                                Inforrms Purchaser when MealPlan is ready
+                                Inforrms Purchaser when DishPlan is ready
                             </div>
                         </div>
                     </div>
                 </foreignObject>
                 <text x="1116" y="1769" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="12px">
-                    Inforrms Purchaser when MealPlan is ready
+                    Inforrms Purchaser when DishPlan is ready
                 </text>
             </switch>
         </g>
@@ -199,7 +199,7 @@
         </g>
         <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-1560-1571-322-26-0)" font-size="12px">
             <text x="1561.5" y="1583.5">
-                MealPlan
+                DishPlan
             </text>
         </g>
         <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-1560-1597-322-26-0)" font-size="12px">
@@ -229,7 +229,7 @@
         </g>
         <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-1560-1727-322-26-0)" font-size="12px">
             <text x="1561.5" y="1739.5">
-                Meal
+                Dish
             </text>
         </g>
         <path d="M 20 690 L 20 670 L 820 670 L 820 690" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
@@ -237,7 +237,7 @@
         <path d="M 20 690 L 820 690" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
         <g fill="rgb(0, 0, 0)" font-family="Helvetica" font-weight="bold" pointer-events="none" text-anchor="middle" font-size="12px">
             <text x="419.5" y="684.5">
-                MealPlan
+                DishPlan
             </text>
         </g>
         <path d="M 30 726 L 30 700 L 450 700 L 450 726" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
@@ -417,7 +417,7 @@
         <path d="M 20 1550 L 820 1550" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
         <g fill="rgb(0, 0, 0)" font-family="Helvetica" font-weight="bold" pointer-events="none" text-anchor="middle" font-size="12px">
             <text x="419.5" y="1544.5">
-                Meal
+                Dish
             </text>
         </g>
         <path d="M 30 1586 L 30 1560 L 450 1560 L 450 1586" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
@@ -751,13 +751,13 @@
                     <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe flex-start; justify-content: unsafe flex-start; width: 410px; height: 1px; padding-top: 743px; margin-left: 1116px;">
                         <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: left; max-height: 32px; overflow: hidden;">
                             <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: none; white-space: normal; overflow-wrap: normal;">
-                                Holds Information about all meals and provides meals to the chef, the
+                                Holds Information about all dishes and provides dishes to the chef, the
                             </div>
                         </div>
                     </div>
                 </foreignObject>
                 <text x="1116" y="755" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="12px">
-                    Holds Information about all meals and provides meals to the chef, th...
+                    Holds Information about all dishes and provides dishes to the chef, th...
                 </text>
             </switch>
         </g>

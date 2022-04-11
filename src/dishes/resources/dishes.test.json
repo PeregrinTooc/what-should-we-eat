@@ -1,7 +1,7 @@
 {
-  "meals": [
+  "dishes": [
     {
-      "mealName": "Ofengemüse mit Kartoffeln und Tzatziki",
+      "dishName": "Ofengemüse mit Kartoffeln und Tzatziki",
       "effort": 3,
       "tags": ["Kartoffeln"],
       "healthLevel": 7

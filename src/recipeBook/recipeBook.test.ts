@@ -1,8 +1,8 @@
 import { createRecipeBookFromJson, createEmptyRecipeBook } from "./recipeBook";
 import { render, screen } from "@testing-library/react";
-import { mondayMeal, mondayMealName } from "../meals/resources/testMeals";
+import { mondayDish, mondayDishName } from "../dishes/resources/testDishes";
 import userEvent from "@testing-library/user-event";
-import { createMealWithProperties } from "../meals/meal";
+import { createDishWithProperties } from "../dishes/dish";
 
 function assertNumberOfPaginationEllipsesIs(i) {
   const paginationEllipsis = "\u2026";
@@ -25,31 +25,31 @@ function assertPagesAreShown(pagesTexts) {
   expect(actualButtonTexts).toEqual(expectedButtonTexts);
 }
 
-function prepareWithMealsAndRender(numberOfMeals) {
+function prepareWithDishesAndRender(numberOfDishes) {
   const recipeBook = createEmptyRecipeBook();
-  for (let i = 0; i < numberOfMeals; i++) {
-    const mealName = `Meal Number ${i}`;
-    recipeBook.add(createMealWithProperties({ mealName: mealName }));
+  for (let i = 0; i < numberOfDishes; i++) {
+    const dishName = `Dish Number ${i}`;
+    recipeBook.add(createDishWithProperties({ dishName: dishName }));
   }
   render(recipeBook.render());
 }
 
-it("should be possible to add meals to the book", () => {
+it("should be possible to add dishes to the book", () => {
   const recipeBook = createEmptyRecipeBook();
-  recipeBook.add(mondayMeal);
+  recipeBook.add(mondayDish);
 });
 
 it("should be possible to create a recipebook from JSON", () => {
   const recipeBook = createRecipeBookFromJson(
-    JSON.stringify({ meals: [mondayMeal] })
+    JSON.stringify({ dishes: [mondayDish] })
   );
   expect(recipeBook).toBeDefined();
 });
-it("should render itself and delegate rendering of its contents to the meals", () => {
+it("should render itself and delegate rendering of its contents to the dishes", () => {
   const recipeBook = createEmptyRecipeBook();
-  recipeBook.add(mondayMeal);
+  recipeBook.add(mondayDish);
   render(recipeBook.render());
-  expect(screen.getByText(mondayMealName)).toBeDefined();
+  expect(screen.getByText(mondayDishName)).toBeDefined();
 });
 
 describe("filter", () => {
@@ -59,65 +59,65 @@ describe("filter", () => {
     recipeBook = createEmptyRecipeBook();
   });
 
-  it("should render a meal filter object, too", () => {
+  it("should render a dish filter object, too", () => {
     render(recipeBook.render());
-    const mealNameFilter = screen.getByRole("textbox");
-    expect(mealNameFilter).toBeDefined();
+    const dishNameFilter = screen.getByRole("textbox");
+    expect(dishNameFilter).toBeDefined();
   });
 
-  it("should render only the meals matching the filter", () => {
-    const someMealName = "SomeMeal";
-    recipeBook.add(createMealWithProperties({ mealName: someMealName }));
+  it("should render only the dishes matching the filter", () => {
+    const someDishName = "SomeDish";
+    recipeBook.add(createDishWithProperties({ dishName: someDishName }));
     render(recipeBook.render());
-    const mealNameFilter = screen.getByRole("textbox");
-    userEvent.type(mealNameFilter, "asdf");
-    expect(screen.queryByText(someMealName)).not.toBeInTheDocument();
-    userEvent.clear(mealNameFilter);
-    expect(screen.getByText(someMealName)).toBeInTheDocument();
+    const dishNameFilter = screen.getByRole("textbox");
+    userEvent.type(dishNameFilter, "asdf");
+    expect(screen.queryByText(someDishName)).not.toBeInTheDocument();
+    userEvent.clear(dishNameFilter);
+    expect(screen.getByText(someDishName)).toBeInTheDocument();
   });
 
   it("should reset page changes on filter changes", () => {
-    prepareWithMealsAndRender(8);
+    prepareWithDishesAndRender(8);
     userEvent.click(screen.getByText("Nächste"));
-    expect(screen.getAllByText(/Meal/)).toHaveLength(1);
-    const mealNameFilter = screen.getByRole("textbox");
-    userEvent.type(mealNameFilter, "Meal");
-    expect(screen.getAllByText(/Meal/)).toHaveLength(7);
+    expect(screen.getAllByText(/Dish/)).toHaveLength(1);
+    const dishNameFilter = screen.getByRole("textbox");
+    userEvent.type(dishNameFilter, "Dish");
+    expect(screen.getAllByText(/Dish/)).toHaveLength(7);
   });
 });
 
 describe("pagination", () => {
-  it("should have pagination if there are more than 7 meals in it", async () => {
-    prepareWithMealsAndRender(8);
+  it("should have pagination if there are more than 7 dishes in it", async () => {
+    prepareWithDishesAndRender(8);
     expect(screen.getByRole("navigation")).toBeDefined();
   });
 
-  it("for 8 meals, there are 2 pages and no ellipses", async () => {
-    prepareWithMealsAndRender(8);
+  it("for 8 dishes, there are 2 pages and no ellipses", async () => {
+    prepareWithDishesAndRender(8);
     assertPagesAreShown(["1", "2"]);
     assertNumberOfPaginationEllipsesIs(0);
   });
 
-  it("for 14 meals, there are 2 pages and no ellipses", async () => {
-    prepareWithMealsAndRender(14);
+  it("for 14 dishes, there are 2 pages and no ellipses", async () => {
+    prepareWithDishesAndRender(14);
     assertPagesAreShown(["1", "2"]);
     assertNumberOfPaginationEllipsesIs(0);
   });
 
-  it("for 15 meals, there are 3 pages and no ellipses", async () => {
-    prepareWithMealsAndRender(15);
+  it("for 15 dishes, there are 3 pages and no ellipses", async () => {
+    prepareWithDishesAndRender(15);
     assertPagesAreShown(["1", "2", "3"]);
     assertNumberOfPaginationEllipsesIs(0);
   });
 
-  it("for 22 meals, there are 4 pages and one ellipses", async () => {
-    prepareWithMealsAndRender(22);
+  it("for 22 dishes, there are 4 pages and one ellipses", async () => {
+    prepareWithDishesAndRender(22);
     assertPagesAreShown(["1", "2", "4"]);
     assertNumberOfPaginationEllipsesIs(1);
   });
 
-  it("for 49 meals, there are 5 page buttons shown and two ellipses after clicking on next 3 times", async () => {
-    prepareWithMealsAndRender(49);
+  it("for 49 dishes, there are 5 page buttons shown and two ellipses after clicking on next 3 times", async () => {
+    prepareWithDishesAndRender(49);
     assertPagesAreShown(["1", "2", "7"]);
     assertNumberOfPaginationEllipsesIs(1);
     userEvent.click(screen.getByText("Nächste"));
@@ -128,7 +128,7 @@ describe("pagination", () => {
   });
 
   it("should have next and previous buttons which work switch the pages", async () => {
-    prepareWithMealsAndRender(49);
+    prepareWithDishesAndRender(49);
     userEvent.click(screen.getByText("Nächste"));
     assertPagesAreShown(["1", "2", "3", "7"]);
     assertNumberOfPaginationEllipsesIs(1);
@@ -138,7 +138,7 @@ describe("pagination", () => {
   });
 
   it("should have working page buttons", async () => {
-    prepareWithMealsAndRender(49);
+    prepareWithDishesAndRender(49);
     assertPagesAreShown(["1", "2", "7"]);
     userEvent.click(screen.getByText("2"));
     assertPagesAreShown(["1", "2", "3", "7"]);
@@ -147,20 +147,20 @@ describe("pagination", () => {
   });
 
   it("should be on the first page after rendering and disable the 'next page button' if on the last page", async () => {
-    prepareWithMealsAndRender(8);
+    prepareWithDishesAndRender(8);
     const previousPageButton = screen.getByText("Vorherige");
     const nextPageButton = screen.getByText("Nächste");
     expect(previousPageButton).toBeDefined();
     expect(previousPageButton).toBeDisabled();
     expect(nextPageButton).toBeDefined();
-    expect(screen.getAllByText(/Meal/)).toHaveLength(7);
+    expect(screen.getAllByText(/Dish/)).toHaveLength(7);
     userEvent.click(nextPageButton);
     expect(nextPageButton).toBeDisabled();
-    expect(screen.getAllByText(/Meal/)).toHaveLength(1);
+    expect(screen.getAllByText(/Dish/)).toHaveLength(1);
   });
 
-  it("should have no pagination if there are no more than 7 meals in it", async () => {
-    prepareWithMealsAndRender(7);
+  it("should have no pagination if there are no more than 7 dishes in it", async () => {
+    prepareWithDishesAndRender(7);
     expect(screen.queryByRole("navigation")).not.toBeInTheDocument();
   });
 });

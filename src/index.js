@@ -13,7 +13,7 @@ function App() {
   });
   useEffect(() => {
     chef.getRecipeBook().then((recipeBook) => {
-      setDesk(createDesk(chef.getMealPlan(), recipeBook));
+      setDesk(createDesk(chef.getDishPlan(), recipeBook));
     });
   }, []);
 
