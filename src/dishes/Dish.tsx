@@ -1,3 +1,4 @@
+import { display } from "html2canvas/dist/types/css/property-descriptors/display";
 import React, { useState } from "react";
 import { Modal } from "react-bulma-components";
 import {
@@ -30,9 +31,9 @@ class DishImpl implements Dish, Publisher {
   export(formatter: DishFormat): void {
     formatter.setProperties({ ...this });
   }
-  isEmpty = () => {
+  isEmpty(): boolean {
     return this.dishName === "";
-  };
+  }
 }
 
 const emptyDish = new DishImpl({});
@@ -83,71 +84,6 @@ export class DishListItemFormat implements DishFormat {
   }
 }
 
-export class DishModalFormat implements DishFormat, Publisher {
-  observers: Function[] = [];
-  subscribe = defaultPublisher.subscribe.bind(this);
-  unsubscribe = defaultPublisher.unsubscribe.bind(this);
-  publish = defaultPublisher.publish.bind(this);
-  showDetailScreen() {
-    this.showDetails = true;
-    this.publish();
-  }
-
-  closeDetailScreen() {
-    this.showDetails = false;
-    this.publish();
-  }
-  public dishName: string;
-  public effort: number;
-  public tags: string[] | any;
-  public healthLevel: number;
-  private showDetails: boolean;
-  constructor() {
-    this.showDetails = false;
-  }
-  render(): JSX.Element {
-    return (
-      <DishModal
-        key={`${this.dishName}-details`}
-        dishFormat={this}
-        closeDetailScreen={this.closeDetailScreen.bind(this)}
-      ></DishModal>
-    );
-  }
-  setProperties({ dishName, effort, tags, healthLevel }) {
-    this.dishName = dishName;
-    this.effort = effort;
-    this.tags = tags;
-    this.healthLevel = healthLevel;
-  }
-}
-
-function DishModal({ dishFormat, closeDetailScreen }) {
-  const [{ showDetails }, setState] = useState({
-    showDetails: dishFormat.showDetails,
-  });
-  const observer = (o) => {
-    if (o.showDetails !== showDetails) {
-      setState({ ...o });
-    }
-  };
-  useSubscriber(dishFormat, observer);
-  return (
-    <>
-      <Modal show={showDetails} onClose={closeDetailScreen}>
-        <Modal.Card>
-          <Modal.Card.Header showClose>
-            <Modal.Card.Title>{dishFormat.dishName}</Modal.Card.Title>
-          </Modal.Card.Header>
-          <Modal.Card.Body>
-            <DishDetails dishFormat={dishFormat} />
-          </Modal.Card.Body>
-        </Modal.Card>
-      </Modal>
-    </>
-  );
-}
-
 function DishListItemComponentWithDetailsButton({
   dishName,
   showDetailScreen,
@@ -171,19 +107,148 @@ function DishListItemComponentWithDetailsButton({
   );
 }
 
+export class DishModalFormat implements DishFormat, Publisher {
+  observers: Function[] = [];
+  subscribe = defaultPublisher.subscribe.bind(this);
+  unsubscribe = defaultPublisher.unsubscribe.bind(this);
+  publish = defaultPublisher.publish.bind(this);
+  showDetailScreen() {
+    this.showDetails = true;
+    this.publish();
+  }
+
+  closeDetailScreen() {
+    this.showDetails = false;
+    this.publish();
+  }
+  public dishProperties: {
+    dishName: string;
+    effort: number;
+    tags: string[] | any;
+    healthLevel: number;
+  };
+  public showDetails: boolean;
+  constructor() {
+    this.showDetails = false;
+  }
+  render(): JSX.Element {
+    return (
+      <DishModal
+        key={`${this.dishProperties.dishName}-details`}
+        dishFormat={this}
+        closeDetailScreen={this.closeDetailScreen.bind(this)}
+      ></DishModal>
+    );
+  }
+  setProperties(dishProperties) {
+    this.dishProperties = { ...dishProperties };
+  }
+}
+
+function DishModal({ dishFormat, closeDetailScreen }) {
+  const [{ showDetails, dishName }, setState] = useState({
+    showDetails: dishFormat.showDetails,
+    dishName: dishFormat.dishProperties.dishName,
+  });
+  const [savedName, setSavedName] = useState(dishName);
+  const observer = (o) => {
+    if (o.showDetails !== showDetails) {
+      setState({ dishName: dishName, showDetails: o.showDetails });
+    }
+  };
+  useSubscriber(dishFormat, observer);
+
+  const buttonTexts = ["ändern", "speichern"];
+  const displayMode = 0;
+  const changeMode = 1;
+  const [{ changeButtonText, mode }, setChangeButtonText] = useState({
+    changeButtonText: buttonTexts[displayMode],
+    mode: displayMode,
+  });
+
+  return (
+    <>
+      <Modal
+        show={showDetails}
+        onClose={() => {
+          setChangeButtonText({
+            changeButtonText: buttonTexts[0],
+            mode: 0,
+          });
+          if (mode === changeMode) {
+            setState({
+              showDetails: false,
+              dishName: savedName,
+            });
+          } else {
+            closeDetailScreen();
+          }
+        }}
+      >
+        <Modal.Card>
+          <Modal.Card.Header>
+            <div className="media">
+              <div className="media-left">
+                <div className="content">
+                  {mode === displayMode ? (
+                    <DishNameComponent dishName={dishName}></DishNameComponent>
+                  ) : (
+                    <input
+                      className="input"
+                      type="text"
+                      value={dishName}
+                      onChange={(e) => {
+                        setState({
+                          showDetails: showDetails,
+                          dishName: e.target.value,
+                        });
+                      }}
+                    ></input>
+                  )}
+                </div>
+              </div>
+              <div className="media-content"></div>
+              <div className="media-right">
+                <div className="mx-1">
+                  <button
+                    className="button"
+                    onClick={() => {
+                      const newMode = (mode + 1) % 2;
+                      setSavedName(dishName);
+                      setChangeButtonText({
+                        changeButtonText: buttonTexts[newMode],
+                        mode: newMode,
+                      });
+                    }}
+                  >
+                    {changeButtonText}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </Modal.Card.Header>
+          <Modal.Card.Body>
+            <DishDetails dishFormat={dishFormat} />
+          </Modal.Card.Body>
+        </Modal.Card>
+      </Modal>
+    </>
+  );
+}
+
 function DishDetails({ dishFormat }) {
   return (
     <div className="media">
       <div className="media-left">
         <div className="content">
-          <p>Aufwand: {dishFormat.effort}/10</p>
-          <p>Gesundheitslevel: {dishFormat.healthLevel}/10</p>
+          <p>Aufwand: {dishFormat.dishProperties.effort}/10</p>
+          <p>Gesundheitslevel: {dishFormat.dishProperties.healthLevel}/10</p>
         </div>
       </div>
       <div className="media-content"></div>
       <div className="media-right">
         <div className="tags are-medium">
-          {dishFormat.tags.map((tag) => {
+          {dishFormat.dishProperties.tags.map((tag) => {
             return (
               <div className="tag" key={tag}>
                 {tag}
