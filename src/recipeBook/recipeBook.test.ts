@@ -2,7 +2,7 @@ import { createRecipeBookFromJson, createEmptyRecipeBook } from "./recipeBook";
 import { render, screen } from "@testing-library/react";
 import { mondayDish, mondayDishName } from "../dishes/resources/testDishes";
 import userEvent from "@testing-library/user-event";
-import { createDishWithProperties } from "../dishes/dish";
+import { createDishWithProperties } from "../dishes/Dish";
 
 function assertNumberOfPaginationEllipsesIs(i) {
   const paginationEllipsis = "\u2026";

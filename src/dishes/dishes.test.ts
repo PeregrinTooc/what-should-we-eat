@@ -40,60 +40,65 @@ describe("tests for dish rendering", () => {
   });
 });
 
-describe('tests for changes to dishes', () => {
-  const format = new DishModalFormat()
-  beforeEach(() => {
-    mondayDish.export(format)
-  })
-  it('should render a "change"-button on the detail screen', async () => {
-    render(format.render());
-    act(() => format.showDetailScreen());
-    const changeButton = screen.getByRole("button", { name: 'ändern' });
-    expect(changeButton).toBeInTheDocument()
-  });
 
-  it("should change the 'change'-button's text to 'save' and vice versa on press", async () => {
-    render(format.render());
-    act(() => format.showDetailScreen());
-    const changeButton = screen.getByRole("button", { name: 'ändern' });
-    userEvent.click(changeButton)
-    expect(changeButton.textContent).toBe('speichern')
-    userEvent.click(changeButton)
-    expect(changeButton.textContent).toBe('ändern')
-  });
+if (process.env.REACT_APP_USE_CHANGE_FEATURE === "true") {
 
-  it("should transform the details screen to an input form on press and save changed on next press but discard them on close", async () => {
-    const newName = 'SomeName';
-    render(format.render());
-    act(() => format.showDetailScreen());
-    let changeButton = screen.getByRole("button", { name: 'ändern' });
-    let closeButton = screen.getByRole("button", { name: '' });
-    userEvent.click(changeButton)
-    let nameInputs = screen.getAllByRole("textbox")
-    let nameInput = nameInputs.filter((input) => { return input["value"] === mondayDishName })[0]
-    userEvent.clear(nameInput);
-    userEvent.type(nameInput, newName)
-    expect(nameInput).toHaveValue(newName)
-    userEvent.click(changeButton)
-    expect(screen.getByText(newName)).toBeInTheDocument();
-    userEvent.click(closeButton)
-    act(() => format.showDetailScreen());
-    closeButton = screen.getByRole("button", { name: '' });
-    changeButton = screen.getByRole("button", { name: 'ändern' });
-    expect(screen.getByText(newName)).toBeInTheDocument();
-    userEvent.click(changeButton)
-    nameInputs = screen.getAllByRole("textbox")
-    nameInput = nameInputs.filter((input) => { return input["value"] === newName })[0]
-    userEvent.clear(nameInput);
-    userEvent.type(nameInput, mondayDishName)
-    expect(nameInput).toHaveValue(mondayDishName)
-    userEvent.click(closeButton)
-    act(() => format.showDetailScreen());
-    closeButton = screen.getByRole("button", { name: '' });
-    changeButton = screen.getByRole("button", { name: 'ändern' });
-    expect(screen.queryByText(mondayDishName)).not.toBeInTheDocument();
+  describe('tests for changes to dishes', () => {
+
+    const format = new DishModalFormat()
+    beforeEach(() => {
+      mondayDish.export(format)
+    })
+    it('should render a "change"-button on the detail screen', async () => {
+      render(format.render());
+      act(() => format.showDetailScreen());
+      const changeButton = screen.getByRole("button", { name: 'ändern' });
+      expect(changeButton).toBeInTheDocument()
+    });
+
+    it("should change the 'change'-button's text to 'save' and vice versa on press", async () => {
+      render(format.render());
+      act(() => format.showDetailScreen());
+      const changeButton = screen.getByRole("button", { name: 'ändern' });
+      userEvent.click(changeButton)
+      expect(changeButton.textContent).toBe('speichern')
+      userEvent.click(changeButton)
+      expect(changeButton.textContent).toBe('ändern')
+    });
+
+    it("should transform the details screen to an input form on press and save changed on next press but discard them on close", async () => {
+      const newName = 'SomeName';
+      render(format.render());
+      act(() => format.showDetailScreen());
+      let changeButton = screen.getByRole("button", { name: 'ändern' });
+      let closeButton = screen.getByRole("button", { name: '' });
+      userEvent.click(changeButton)
+      let nameInputs = screen.getAllByRole("textbox")
+      let nameInput = nameInputs.filter((input) => { return input["value"] === mondayDishName })[0]
+      userEvent.clear(nameInput);
+      userEvent.type(nameInput, newName)
+      expect(nameInput).toHaveValue(newName)
+      userEvent.click(changeButton)
+      expect(screen.getByText(newName)).toBeInTheDocument();
+      userEvent.click(closeButton)
+      act(() => format.showDetailScreen());
+      closeButton = screen.getByRole("button", { name: '' });
+      changeButton = screen.getByRole("button", { name: 'ändern' });
+      expect(screen.getByText(newName)).toBeInTheDocument();
+      userEvent.click(changeButton)
+      nameInputs = screen.getAllByRole("textbox")
+      nameInput = nameInputs.filter((input) => { return input["value"] === newName })[0]
+      userEvent.clear(nameInput);
+      userEvent.type(nameInput, mondayDishName)
+      expect(nameInput).toHaveValue(mondayDishName)
+      userEvent.click(closeButton)
+      act(() => format.showDetailScreen());
+      closeButton = screen.getByRole("button", { name: '' });
+      changeButton = screen.getByRole("button", { name: 'ändern' });
+      expect(screen.queryByText(mondayDishName)).not.toBeInTheDocument();
+    });
   });
-});
+}
 
 describe("tests for dish filtering", () => {
   let filterObject;

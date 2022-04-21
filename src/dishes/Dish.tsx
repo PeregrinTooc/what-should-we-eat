@@ -207,24 +207,27 @@ function DishModal({ dishFormat, closeDetailScreen }) {
                   )}
                 </div>
               </div>
-              <div className="media-content"></div>
-              <div className="media-right">
-                <div className="mx-1">
-                  <button
-                    className="button"
-                    onClick={() => {
-                      const newMode = (mode + 1) % 2;
-                      setSavedName(dishName);
-                      setChangeButtonText({
-                        changeButtonText: buttonTexts[newMode],
-                        mode: newMode,
-                      });
-                    }}
-                  >
-                    {changeButtonText}
-                  </button>
+              {process.env.REACT_APP_USE_CHANGE_FEATURE === "true" ? (
+                <div className="media-right">
+                  <div className="content">
+                    <div className="mx-1">
+                      <button
+                        className="button"
+                        onClick={() => {
+                          const newMode = (mode + 1) % 2;
+                          setSavedName(dishName);
+                          setChangeButtonText({
+                            changeButtonText: buttonTexts[newMode],
+                            mode: newMode,
+                          });
+                        }}
+                      >
+                        {changeButtonText}
+                      </button>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              ) : null}
             </div>
           </Modal.Card.Header>
           <Modal.Card.Body>
