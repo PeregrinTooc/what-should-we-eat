@@ -1,4 +1,3 @@
-import { display } from "html2canvas/dist/types/css/property-descriptors/display";
 import React, { useState } from "react";
 import { Modal } from "react-bulma-components";
 import {
@@ -49,14 +48,14 @@ export function createEmptyDish(): Dish {
 export class DishNameFormat implements DishFormat {
   public dishName: string;
   render(): JSX.Element {
-    return <DishNameComponent dishName={this.dishName} />;
+    return <DishNameDisplay dishName={this.dishName} />;
   }
   setProperties({ dishName }) {
     this.dishName = dishName;
   }
 }
 
-function DishNameComponent({ dishName }) {
+function DishNameDisplay({ dishName }) {
   return <p>{dishName}</p>;
 }
 export class DishListItemFormat implements DishFormat {
@@ -91,7 +90,7 @@ function DishListItemComponentWithDetailsButton({
   return (
     <div className="media">
       <div className="media-content">
-        <DishNameComponent dishName={dishName}></DishNameComponent>
+        <DishNameDisplay dishName={dishName}></DishNameDisplay>
       </div>
       <div className="media-right">
         <button
@@ -166,6 +165,14 @@ function DishModal({ dishFormat, closeDetailScreen }) {
     mode: displayMode,
   });
 
+  const onChangeClick = () => {
+    const newMode = (mode + 1) % 2;
+    setSavedName(dishName);
+    setChangeButtonText({
+      changeButtonText: buttonTexts[newMode],
+      mode: newMode,
+    });
+  };
   return (
     <>
       <Modal
@@ -191,43 +198,20 @@ function DishModal({ dishFormat, closeDetailScreen }) {
               <div className="media-left">
                 <div className="content">
                   {mode === displayMode ? (
-                    <DishNameComponent dishName={dishName}></DishNameComponent>
+                    <DishNameDisplay dishName={dishName}></DishNameDisplay>
                   ) : (
-                    <input
-                      className="input"
-                      type="text"
-                      value={dishName}
-                      onChange={(e) => {
-                        setState({
-                          showDetails: showDetails,
-                          dishName: e.target.value,
-                        });
-                      }}
-                    ></input>
+                    <DishNameChangeableComponent
+                      dishName={dishName}
+                      setState={setState}
+                      showDetails={showDetails}
+                    />
                   )}
                 </div>
               </div>
-              {process.env.REACT_APP_USE_CHANGE_FEATURE === "true" ? (
-                <div className="media-right">
-                  <div className="content">
-                    <div className="mx-1">
-                      <button
-                        className="button"
-                        onClick={() => {
-                          const newMode = (mode + 1) % 2;
-                          setSavedName(dishName);
-                          setChangeButtonText({
-                            changeButtonText: buttonTexts[newMode],
-                            mode: newMode,
-                          });
-                        }}
-                      >
-                        {changeButtonText}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ) : null}
+              <ChangeButton
+                onChangeClick={onChangeClick}
+                changeButtonText={changeButtonText}
+              />
             </div>
           </Modal.Card.Header>
           <Modal.Card.Body>
@@ -261,5 +245,35 @@ function DishDetails({ dishFormat }) {
         </div>
       </div>
     </div>
+  );
+}
+
+function ChangeButton({ onChangeClick, changeButtonText }) {
+  return process.env.REACT_APP_USE_CHANGE_FEATURE === "true" ? (
+    <div className="media-right">
+      <div className="content">
+        <div className="mx-1">
+          <button className="button" onClick={onChangeClick}>
+            {changeButtonText}
+          </button>
+        </div>
+      </div>
+    </div>
+  ) : null;
+}
+
+function DishNameChangeableComponent({ dishName, setState, showDetails }) {
+  return (
+    <input
+      className="input"
+      type="text"
+      value={dishName}
+      onChange={(e) => {
+        setState({
+          showDetails: showDetails,
+          dishName: e.target.value,
+        });
+      }}
+    ></input>
   );
 }
