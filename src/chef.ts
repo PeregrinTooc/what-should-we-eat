@@ -1,8 +1,9 @@
 import axios from "axios";
 import { Dish } from "./dishes/dish.tsx";
-import { createEmptyDishPlan, DishPlan } from "./dishPlan/dishPlan.tsx";
+import { createEmptyDishPlan, DishPlan, createDishPlanFromJSON } from "./dishPlan/dishPlan.tsx";
 import { createRecipeBookFromJson, RecipeBook } from "./recipeBook/recipeBook.tsx";
 import { Buffer } from 'buffer';
+import { getCookieJar } from './utils/cookieJar.ts';
 
 
 let pickedDish: Dish
@@ -28,7 +29,11 @@ function pickDish(dish: Dish) {
 }
 
 function getDishPlan(): DishPlan {
-    return createEmptyDishPlan()
+    const cookieJar = getCookieJar();
+    const storedDishPlan = cookieJar.takeCookie('dishPlan')
+    const result = storedDishPlan === '' ? createEmptyDishPlan() : createDishPlanFromJSON(storedDishPlan);
+    result.subscribe((dishPlan: DishPlan) => cookieJar.putCookie('dishPlan', dishPlan.exportDishesToJSON()))
+    return result
 }
 
 function addPickedDishForDayToDishPlan(dayId, dishPlan): void {

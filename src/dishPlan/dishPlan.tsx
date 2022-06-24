@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import "bulma/css/bulma.min.css";
 import { Box, Button, Form } from "react-bulma-components";
-import { createEmptyDish, Dish, DishNameFormat } from "./../dishes/Dish.tsx";
+import {
+  createEmptyDish,
+  Dish,
+  DishNameFormat,
+  createDishWithProperties,
+} from "./../dishes/Dish.tsx";
 import chef from "./../chef.ts";
 import {
   useSubscriber,
@@ -12,12 +17,30 @@ import Days, { mon, tue, wed, thu, fri, sat, sun } from "../utils/days.ts";
 
 export interface DishPlan {
   addDishFor(day: Days, dish: Dish): void;
+  exportDishesToJSON(): string;
   render(): JSX.Element;
   removeDishFor(day: Days): void;
 }
 
 export function createEmptyDishPlan(): DishPlan {
   return new DishPlanImpl();
+}
+
+export function createDishPlanFromJSON(dishJSON: string): DishPlan {
+  const result = new DishPlanImpl();
+  let dishes = JSON.parse(dishJSON).map((dish) =>
+    createDishWithProperties(dish)
+  );
+  result.dishes = new Map([
+    [mon.id, dishes[0]],
+    [tue.id, dishes[1]],
+    [wed.id, dishes[2]],
+    [thu.id, dishes[3]],
+    [fri.id, dishes[4]],
+    [sat.id, dishes[5]],
+    [sun.id, dishes[6]],
+  ]);
+  return result;
 }
 
 class DishPlanImpl implements DishPlan, Publisher {
@@ -35,7 +58,13 @@ class DishPlanImpl implements DishPlan, Publisher {
   subscribe = defaultPublisher.subscribe.bind(this);
   unsubscribe = defaultPublisher.unsubscribe.bind(this);
   publish = defaultPublisher.publish.bind(this);
-
+  exportDishesToJSON(): string {
+    let dishes = [];
+    this.dishes.forEach((dish) => {
+      dishes.push(dish);
+    });
+    return JSON.stringify(dishes);
+  }
   removeDishFor = (day: Days) => {
     this.addDishFor(day, createEmptyDish());
   };
