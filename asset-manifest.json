@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/what-should-we-eat/static/css/main.f2a760e7.css",
-    "main.js": "/what-should-we-eat/static/js/main.7dcf2e7e.js",
+    "main.css": "/what-should-we-eat/static/css/main.a0580cf9.css",
+    "main.js": "/what-should-we-eat/static/js/main.3ef8777e.js",
     "index.html": "/what-should-we-eat/index.html",
-    "main.f2a760e7.css.map": "/what-should-we-eat/static/css/main.f2a760e7.css.map",
-    "main.7dcf2e7e.js.map": "/what-should-we-eat/static/js/main.7dcf2e7e.js.map"
+    "main.a0580cf9.css.map": "/what-should-we-eat/static/css/main.a0580cf9.css.map",
+    "main.3ef8777e.js.map": "/what-should-we-eat/static/js/main.3ef8777e.js.map"
   },
   "entrypoints": [
-    "static/css/main.f2a760e7.css",
-    "static/js/main.7dcf2e7e.js"
+    "static/css/main.a0580cf9.css",
+    "static/js/main.3ef8777e.js"
   ]
 }
