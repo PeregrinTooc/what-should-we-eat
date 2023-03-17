@@ -1,10 +1,12 @@
-import { render, screen, act } from "@testing-library/react";
+import { render, screen, act, waitForElementToBeRemoved, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mondayDish, mondayDishName } from "./resources/testDishes";
 import { createDishFilterObject } from "./DishNameFilter";
 import { DishNameFormat, DishListItemFormat, DishModalFormat, createDishWithProperties } from './Dish';
 
 describe("tests for dish rendering", () => {
+  let user;
+  beforeEach(() => user = userEvent.setup());
   it("should render as a modal", async () => {
     const format = new DishModalFormat()
     mondayDish.export(format)
@@ -17,7 +19,7 @@ describe("tests for dish rendering", () => {
     expect(screen.getByText("Aufwand: 3/10")).toBeInTheDocument();
     expect(screen.getByText("Gesundheitslevel: 7/10")).toBeInTheDocument();
     const closeButton = screen.getByLabelText("close");
-    await userEvent.click(closeButton);
+    await act(async () => { await user.click(closeButton) });
     expect(screen.queryByText(mondayDishName)).not.toBeInTheDocument();
   });
 
@@ -29,7 +31,7 @@ describe("tests for dish rendering", () => {
     const detailsButton = screen.getByRole("button");
     expect(detailsButton).toHaveTextContent("Details");
     expect(screen.queryByLabelText("close")).not.toBeInTheDocument();
-    userEvent.click(detailsButton);
+    await act(async () => { await user.click(detailsButton) });
     expect(screen.getByLabelText("close")).toBeInTheDocument();
   });
   it("should render its name", async () => {
@@ -46,8 +48,10 @@ if (process.env.REACT_APP_USE_CHANGE_FEATURE === "true") {
   describe('tests for changes to dishes', () => {
 
     const format = new DishModalFormat()
+    let user;
     beforeEach(() => {
       mondayDish.export(format)
+      user = userEvent.setup();
     })
     it('should render a "change"-button on the detail screen', async () => {
       render(format.render());
@@ -60,9 +64,9 @@ if (process.env.REACT_APP_USE_CHANGE_FEATURE === "true") {
       render(format.render());
       act(() => format.showDetailScreen());
       const changeButton = screen.getByRole("button", { name: 'ändern' });
-      userEvent.click(changeButton)
+      await act(async () => { await user.click(changeButton) })
       expect(changeButton.textContent).toBe('speichern')
-      userEvent.click(changeButton)
+      await act(async () => { await user.click(changeButton) })
       expect(changeButton.textContent).toBe('ändern')
     });
 
@@ -72,26 +76,26 @@ if (process.env.REACT_APP_USE_CHANGE_FEATURE === "true") {
       act(() => format.showDetailScreen());
       let changeButton = screen.getByRole("button", { name: 'ändern' });
       let closeButton = screen.getByRole("button", { name: '' });
-      userEvent.click(changeButton)
+      await act(async () => { await user.click(changeButton) });
       let nameInputs = screen.getAllByRole("textbox")
       let nameInput = nameInputs.filter((input) => { return input["value"] === mondayDishName })[0]
-      userEvent.clear(nameInput);
-      userEvent.type(nameInput, newName)
+      await act(async () => { await user.clear(nameInput) });
+      await act(async () => { await user.type(nameInput, newName) });
       expect(nameInput).toHaveValue(newName)
-      userEvent.click(changeButton)
+      await act(async () => { await user.click(changeButton) })
       expect(screen.getByText(newName)).toBeInTheDocument();
-      userEvent.click(closeButton)
+      await act(async () => { await user.click(closeButton) })
       act(() => format.showDetailScreen());
       closeButton = screen.getByRole("button", { name: '' });
       changeButton = screen.getByRole("button", { name: 'ändern' });
       expect(screen.getByText(newName)).toBeInTheDocument();
-      userEvent.click(changeButton)
+      await act(async () => { await user.click(changeButton) })
       nameInputs = screen.getAllByRole("textbox")
       nameInput = nameInputs.filter((input) => { return input["value"] === newName })[0]
-      userEvent.clear(nameInput);
-      userEvent.type(nameInput, mondayDishName)
+      await act(async () => { await user.clear(nameInput) });
+      await act(async () => { await user.type(nameInput, mondayDishName) })
       expect(nameInput).toHaveValue(mondayDishName)
-      userEvent.click(closeButton)
+      await act(async () => { await user.click(closeButton) })
       act(() => format.showDetailScreen());
       closeButton = screen.getByRole("button", { name: '' });
       changeButton = screen.getByRole("button", { name: 'ändern' });
@@ -102,8 +106,10 @@ if (process.env.REACT_APP_USE_CHANGE_FEATURE === "true") {
 
 describe("tests for dish filtering", () => {
   let filterObject;
+  let user;
   beforeEach(() => {
     filterObject = createDishFilterObject();
+    user = userEvent.setup();
   });
 
   it.each([
@@ -121,16 +127,17 @@ describe("tests for dish filtering", () => {
   );
 
   it("should render the filter bar", async () => {
+
     filterObject.addFilterForName().toMatchContain("");
     render(filterObject.render());
     expect(screen.getByText("Name")).toBeInTheDocument();
     const input = screen.getByRole("textbox");
     expect(input).toHaveValue("");
-    userEvent.type(input, "Ofen");
-    expect(input).toHaveValue("Ofen");
-    userEvent.clear(input);
+    await act(async () => { await user.type(input, "Ofen") });
+    expect(input).toHaveValue("Ofen")
+    await act(async () => { await user.clear(input) });
     expect(input).toHaveValue("");
-    userEvent.type(input, "asdf");
+    await act(async () => { await user.type(input, "asdf") });
     expect(filterObject.matches(mondayDish)).toEqual(false);
     expect(filterObject.matches(createDishWithProperties({ dishName: "asdf" }))).toEqual(true);
   });

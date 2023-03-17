@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { mondayDish, mondayDishName } from "../dishes/resources/testDishes";
 import userEvent from "@testing-library/user-event";
 import { createDishWithProperties } from "../dishes/Dish";
+import { beforeEach } from "@jest/globals";
 
 function assertNumberOfPaginationEllipsesIs(i) {
   const paginationEllipsis = "\u2026";
@@ -54,9 +55,11 @@ it("should render itself and delegate rendering of its contents to the dishes", 
 
 describe("filter", () => {
   let recipeBook;
+  let user;
 
   beforeEach(() => {
     recipeBook = createEmptyRecipeBook();
+    user = userEvent.setup();
   });
 
   it("should render a dish filter object, too", () => {
@@ -65,28 +68,30 @@ describe("filter", () => {
     expect(dishNameFilter).toBeDefined();
   });
 
-  it("should render only the dishes matching the filter", () => {
+  it("should render only the dishes matching the filter", async () => {
     const someDishName = "SomeDish";
     recipeBook.add(createDishWithProperties({ dishName: someDishName }));
     render(recipeBook.render());
     const dishNameFilter = screen.getByRole("textbox");
-    userEvent.type(dishNameFilter, "asdf");
+    await user.type(dishNameFilter, "asdf");
     expect(screen.queryByText(someDishName)).not.toBeInTheDocument();
-    userEvent.clear(dishNameFilter);
+    await user.clear(dishNameFilter);
     expect(screen.getByText(someDishName)).toBeInTheDocument();
   });
 
-  it("should reset page changes on filter changes", () => {
+  it("should reset page changes on filter changes", async () => {
     prepareWithDishesAndRender(8);
-    userEvent.click(screen.getByText("Nächste"));
+    await user.click(screen.getByText("Nächste"));
     expect(screen.getAllByText(/Dish/)).toHaveLength(1);
     const dishNameFilter = screen.getByRole("textbox");
-    userEvent.type(dishNameFilter, "Dish");
+    await user.type(dishNameFilter, "Dish");
     expect(screen.getAllByText(/Dish/)).toHaveLength(7);
   });
 });
 
 describe("pagination", () => {
+  let user;
+  beforeEach(() => { user = userEvent.setup() })
   it("should have pagination if there are more than 7 dishes in it", async () => {
     prepareWithDishesAndRender(8);
     expect(screen.getByRole("navigation")).toBeDefined();
@@ -120,29 +125,29 @@ describe("pagination", () => {
     prepareWithDishesAndRender(49);
     assertPagesAreShown(["1", "2", "7"]);
     assertNumberOfPaginationEllipsesIs(1);
-    userEvent.click(screen.getByText("Nächste"));
-    userEvent.click(screen.getByText("Nächste"));
-    userEvent.click(screen.getByText("Nächste"));
+    await user.click(screen.getByText("Nächste"));
+    await user.click(screen.getByText("Nächste"));
+    await user.click(screen.getByText("Nächste"));
     assertPagesAreShown(["1", "3", "4", "5", "7"]);
     assertNumberOfPaginationEllipsesIs(2);
   });
 
   it("should have next and previous buttons which work switch the pages", async () => {
     prepareWithDishesAndRender(49);
-    userEvent.click(screen.getByText("Nächste"));
+    await user.click(screen.getByText("Nächste"));
     assertPagesAreShown(["1", "2", "3", "7"]);
     assertNumberOfPaginationEllipsesIs(1);
-    userEvent.click(screen.getByText("Vorherige"));
+    await user.click(screen.getByText("Vorherige"));
     assertPagesAreShown(["1", "2", "7"]);
     assertNumberOfPaginationEllipsesIs(1);
-  });
+  })
 
   it("should have working page buttons", async () => {
     prepareWithDishesAndRender(49);
     assertPagesAreShown(["1", "2", "7"]);
-    userEvent.click(screen.getByText("2"));
+    await user.click(screen.getByText("2"));
     assertPagesAreShown(["1", "2", "3", "7"]);
-    userEvent.click(screen.getByText("7"));
+    await user.click(screen.getByText("7"));
     assertPagesAreShown(["1", "6", "7"]);
   });
 
@@ -154,7 +159,7 @@ describe("pagination", () => {
     expect(previousPageButton).toBeDisabled();
     expect(nextPageButton).toBeDefined();
     expect(screen.getAllByText(/Dish/)).toHaveLength(7);
-    userEvent.click(nextPageButton);
+    await user.click(nextPageButton);
     expect(nextPageButton).toBeDisabled();
     expect(screen.getAllByText(/Dish/)).toHaveLength(1);
   });
@@ -163,4 +168,4 @@ describe("pagination", () => {
     prepareWithDishesAndRender(7);
     expect(screen.queryByRole("navigation")).not.toBeInTheDocument();
   });
-});
+})

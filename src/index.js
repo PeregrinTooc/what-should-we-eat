@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import "./index.css";
 import chef from "./chef.ts";
 import "bulma/css/bulma.min.css";
@@ -19,9 +19,10 @@ function App() {
 
   return <>{desk.render()}</>;
 }
-ReactDOM.render(
+const rootContainer = document.getElementById("root");
+const root = createRoot(rootContainer);
+root.render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>,
-  document.getElementById("root")
+  </React.StrictMode>
 );
